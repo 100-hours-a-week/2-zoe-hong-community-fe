@@ -5,7 +5,7 @@
     width: 100%;
 }
 .input-list {
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 .input-component {
     width: 100%;
@@ -18,7 +18,7 @@
 }
 .input-component input {
     width: 100%;
-    height: 40px;
+    height: 30px;
     background-color: rgba(255, 255, 255, 10);
     border: 1px solid black;
     border-radius: 4px;
