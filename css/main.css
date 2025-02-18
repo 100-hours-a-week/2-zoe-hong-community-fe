@@ -8,11 +8,13 @@
 body, html {
     font-family: Pretendard Variable, Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif !important;
     background-color: var(--main-bg-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 ul, ol {
     list-style: none;
 }
-
 a {
     text-decoration: none
 }
@@ -22,7 +24,8 @@ a {
 */
 .wrap {
     width: 100%;
-    height: 100vh;
+    flex: 1;
+    padding-bottom: 20px;
 }
 .container {
     width: 80%;
@@ -30,7 +33,7 @@ a {
     height: 40%;
 }
 .container #nav {
-    margin-bottom: 70px;
+    margin-bottom: 50px;
 }
 .center-column {
     display: flex;
