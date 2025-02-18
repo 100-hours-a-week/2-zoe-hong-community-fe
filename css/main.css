@@ -1,0 +1,70 @@
+@charset "UTF-8";
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css");
+
+* {
+    margin: 0px;
+    padding: 0px;
+    font-family: Pretendard Variable, Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif !important;
+    background-color: var(--main-bg-color);
+}
+
+ul, ol {
+    list-style: none;
+}
+
+a {
+    text-decoration: none
+}
+
+/*
+    스타일
+*/
+
+.center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 
+    폰트
+*/
+.font8 {
+    font-size: 8px;
+    font-weight: 400;
+}
+.font12 {
+    font-size: 12px;
+    font-weight: 400;
+}
+.font12-bold {
+    font-size: 12px;
+    font-weight: 600;
+}
+.font16 {
+    font-size: 16px;
+    font-weight: 400;
+}
+.font20 {
+    font-size: 20px;
+    font-weight: 600;
+}
+.font24 {
+    font-size: 24px;
+    font-weight: 700;
+}
+.font32 {
+    font-size: 32px;
+    font-weight: 700;
+}
+
+/*
+    색상 코드: css 변수
+*/
+:root {
+    --main-bg-color: rgb(244, 245, 247);
+    --light-purple: rgb(170, 160, 229);
+    --light-purple-hover: rgb(150, 140, 209);
+    --light-gray: rgb(230, 230, 230);
+}
