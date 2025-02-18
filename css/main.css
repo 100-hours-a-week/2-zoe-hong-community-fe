@@ -40,7 +40,7 @@ a {
     justify-content: center;
     align-items: center;
 }
-.container legend {
+.container #nav {
     margin-bottom: 70px;
 }
 
