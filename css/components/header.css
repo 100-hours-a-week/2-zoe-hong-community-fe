@@ -1,0 +1,22 @@
+.header {
+    background-color: var(--main-bg-color);
+    width: 100vh;
+    height: 96px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    border-bottom: 1px solid black;
+    padding: 10px;
+    display: flex;
+}
+.header > div {
+    width: 100%;
+}
+.logo div {
+    color: var(--light-purple);
+}
+.logo img {
+    width: 50px;
+    margin-bottom: 5px;
+}
