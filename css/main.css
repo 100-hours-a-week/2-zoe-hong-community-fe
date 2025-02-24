@@ -33,7 +33,12 @@ a {
     height: 40%;
 }
 .container #nav {
-    margin-bottom: 40px;
+    margin: 40px 0px;
+    text-align: center;
+    line-height: 120%;
+}
+.box-component {
+    width: 300px;
 }
 .center-column {
     display: flex;
@@ -101,8 +106,9 @@ a {
     색상 코드: css 변수
 */
 :root {
-    --main-bg-color: rgb(244, 245, 247);
-    --light-purple: rgb(170, 160, 229);
-    --light-purple-hover: rgb(188, 182, 223);
-    --light-gray: rgb(250, 250, 250);
+    --main-bg-color: #f4f5f7;
+    --light-purple: #aaa0e5;
+    --light-purple-hover: #bcb6df;
+    --light-gray: #fafafa;
+    --gray: #cccccc;
 }
