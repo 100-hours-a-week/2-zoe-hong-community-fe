@@ -1,0 +1,73 @@
+.button-container {
+    width: 100%;
+    text-align: right;
+    margin-bottom: 15px;
+}
+.card-list {
+    width: 100%;
+    margin-bottom: 16px;
+}
+.card {
+    width: 100%;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 3px 4px 4px var(--gray);
+}
+.card > .content {
+    padding: 20px;
+}
+.card > .content > .subject {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+.card > .content > .metatext {
+    font-size: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.card > .content > .user {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 700;
+}
+.circle-img {
+    --img-size: 23px;
+    width: var(--img-size);
+    height: var(--img-size);
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.25);
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+}
+.circle-img:hover {
+    transition: ease 0.3s;
+    scale: 1.05;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+.hr-line {
+    border: none;
+    height: 1px;
+    background-color: var(--gray);
+}
+.post-button {
+    width: 120px;
+    height: 35px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 15px;
+    background-color: var(--light-purple);
+    color: white;
+}
+.post-button:hover {
+    color: var(--light-gray);
+    background-color: var(--light-purple-hover);
+    transition: ease 0.1s;
+    cursor: pointer;
+}
