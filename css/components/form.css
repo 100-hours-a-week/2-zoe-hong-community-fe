@@ -1,0 +1,43 @@
+.box-component form {
+    width: 100%;
+}
+.input-list {
+    margin-bottom: 20px;
+}
+.input-component {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+    margin-bottom: 12px;
+    gap: 5px;
+}
+.input-component input {
+    width: 100%;
+    height: 30px;
+    background-color: rgba(255, 255, 255, 10);
+    border: 1px solid black;
+    border-radius: 4px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+.input-component input:focus {
+    outline: 2px solid var(--light-purple);
+} 
+.box-component button {
+    width: 100%;
+    height: 35px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--light-purple);
+    color: white;
+}
+.box-component button:hover {
+    color: var(--light-gray);
+    background-color: var(--light-purple-hover);
+    transition: ease 0.1s;
+    cursor: pointer;
+}
