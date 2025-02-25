@@ -1,3 +1,7 @@
+.box-component-500 {
+    display: flex;
+    width: 500px;
+}
 .right-align-container {
     width: 100%;
     display: flex;
