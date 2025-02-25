@@ -28,8 +28,7 @@ a {
     padding-bottom: 30px;
 }
 .container {
-    width: 80%;
-    min-width: 400px;
+    width: 100%;
     height: 40%;
 }
 .container #nav {
@@ -39,7 +38,7 @@ a {
 }
 .box-component {
     display: flex;
-    width: 320px;
+    width: 300px;
 }
 .column {
     flex-direction: column;
