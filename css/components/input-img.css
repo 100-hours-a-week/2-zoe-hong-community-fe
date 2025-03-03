@@ -1,0 +1,47 @@
+.input-img-component {
+    width: 100%;
+    gap: 5px;
+    margin-bottom: 12px;
+}
+.circle-img {
+    --img-size: 100px;
+    width: var(--img-size);
+    height: var(--img-size);
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.25);
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+}
+.circle-img:hover {
+    transition: ease 0.3s;
+    scale: 1.05;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+.circle-img input[type="file"] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+.plus-icon::before,
+.plus-icon::after {
+    content: '';
+    position: absolute;
+    background-color: black;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.plus-icon::before {
+    width: 30px;
+    height: 1px;
+}
+.plus-icon::after {
+    width: 1px;
+    height: 30px;
+}
