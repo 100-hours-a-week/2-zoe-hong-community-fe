@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
   const joinForm = document.querySelector('form');
-  let profileImageFile = null; // 프로필 이미지 파일 저장 변수
+  const redirectToLogin = document.querySelector('#redirectToLogin');
+  let profileImageFile = null;
   
-  // 이미지 업로드 처리
   const imageInput = document.querySelector('.circle-img input[type="file"]');
   if (imageInput) {
     imageInput.addEventListener('change', function(event) {
@@ -10,16 +10,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (file) {
         profileImageFile = file;
         
-        // 이미지 미리보기 표시 (선택적)
         const circleImg = document.querySelector('.circle-img');
         if (circleImg) {
-          // plus 아이콘 숨기기
           const plusIcon = circleImg.querySelector('.plus-icon');
           if (plusIcon) {
             plusIcon.style.display = 'none';
           }
           
-          // 이미지 미리보기 생성
           const previewImg = document.createElement('img');
           previewImg.className = 'preview-image';
           previewImg.style.width = '100%';
@@ -33,7 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
           }
           reader.readAsDataURL(file);
           
-          // 기존 이미지 미리보기가 있으면 제거
           const existingPreview = circleImg.querySelector('.preview-image');
           if (existingPreview) {
             circleImg.removeChild(existingPreview);
@@ -80,4 +76,14 @@ document.addEventListener('DOMContentLoaded', () => {
   } else {
     console.error('회원가입 폼을 찾을 수 없습니다.')
   }
-})
+
+  if (redirectToLogin) {
+    redirectToLogin.addEventListener('click', function(event) {
+      console.log('redirect to Login page.');
+      window.location.href = 'login.html';
+    })
+    redirectToLogin.style.cursor = 'pointer';
+  } else {
+    console.error('로그인 페이지로 이동하는 데 실패했습니다.');
+  };
+});
