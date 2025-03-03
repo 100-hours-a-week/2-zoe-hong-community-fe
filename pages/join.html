@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/css/components/form.css"/>
     <link rel="stylesheet" href="/css/components/input-img.css"/>
     <script src="/js/components/header.js"></script>
+    <script src="/js/pages/join.js"></script>
     <title>2-KTB Community Project</title>
 </head>
 <body>
@@ -17,7 +18,7 @@
             <div id="nav" class="font24">회원가입</div>
     
             <div class="box-component center column">
-                <form action="login.html" method="post">
+                <form id="joinForm" action="#" method="post">
                     <div class="input-list">
                         <div class="input-img-component">
                             <label for="circle-img" class="font12-bold">프로필 사진</label>
@@ -32,25 +33,25 @@
                             <label for="email" class="font12-bold">
                                 이메일<strong>*</strong>
                             </label>
-                            <input id="email" type="text" class="font12" placeholder="이메일을 입력하세요" required />
+                            <input id="email" type="text" class="font12" placeholder="이메일을 입력하세요" />
                         </div>
                         <div class="input-component">
                             <label for="password" class="font12-bold">
                                 비밀번호<strong>*</strong>
                             </label>
-                            <input id="password" type="password" class="font12" placeholder="비밀번호를 입력하세요" required />
+                            <input id="password" type="password" class="font12" placeholder="비밀번호를 입력하세요" />
                         </div>
                         <div class="input-component">
                             <label for="password_check" class="font12-bold">
                                 비밀번호 확인<strong>*</strong>
                             </label>
-                            <input id="password_check" type="password" class="font12" placeholder="비밀번호를 한번 더 입력하세요" required />
+                            <input id="password_check" type="password" class="font12" placeholder="비밀번호를 한번 더 입력하세요" />
                         </div>
                         <div class="input-component">
                             <label for="nickname" class="font12-bold">
                                 닉네임<strong>*</strong>
                             </label>
-                            <input id="nickname" type="text" class="font12" placeholder="닉네임을 입력하세요" required />
+                            <input id="nickname" type="text" class="font12" placeholder="닉네임을 입력하세요" />
                         </div>
                     </div>
                     <button type="submit" class="font12-bold">회원가입</button>
