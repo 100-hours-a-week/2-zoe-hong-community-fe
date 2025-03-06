@@ -1,11 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const createPostForm = document.querySelector('form');
-  if (createPostForm) {
-    createPostForm.addEventListener('submit', function(event) {
+  const createPost = document.querySelector('form');
+  if (createPost) {
+    createPost.addEventListener('submit', function(event) {
       event.preventDefault();
       const title = document.getElementById('title').value;
       const content = document.getElementById('content').value;
-      const file = document.getElementById('file').value;
+      const image = document.getElementById('image').value;
+
       if(!title) {
         alert('제목을 입력해주세요.');
         return;

@@ -1,21 +1,74 @@
 .header {
-    background-color: var(--main-bg-color);
-    width: 100vh;
-    height: 96px;
-    top: 0;
-    width: 100%;
-    z-index: 100;
-    border-bottom: 1px solid black;
-    padding: 10px;
-    display: flex;
+  background-color: var(--main-bg-color);
+  width: 100%;
+  height: 96px;
+  top: 0;
+  position: relative;
+  border-bottom: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.header > div {
-    width: 100%;
+
+.header > .logo {
+  position: absolute;
+  text-align: center;
+  user-select: none;
 }
-.logo div {
-    color: var(--light-purple);
+
+.black {
+  color: black;
 }
-.logo img {
-    width: 50px;
-    margin-bottom: 5px;
+
+.back-button {
+  position: absolute;
+  left: calc(50% - 200px);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.profile-container {
+  position: absolute;
+  right: calc(50% - 200px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.right-icon {
+  --icon-size: 30px;
+  position: relative;
+  cursor: pointer;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  background-color: var(--gray);
+  min-width: 120px;
+  display: none;
+  z-index: 100;
+}
+
+.dropdown-menu.active {
+  display: block;
+}
+
+.dropdown-item {
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 12px;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.dropdown-item:hover {
+  background-color: gray;
+  font-size: 12.5px;
 }

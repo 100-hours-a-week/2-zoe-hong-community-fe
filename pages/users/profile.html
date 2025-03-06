@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,12 +7,13 @@
     <link rel="stylesheet" href="/css/reset.css"/>
     <link rel="stylesheet" href="/css/components/form.css"/>
     <link rel="stylesheet" href="profile.css"/>
-    <link rel="stylesheet" href="/css/components/input-img.css"/>
+    <link rel="stylesheet" href="/css/components/img.css"/>
     <script src="/js/components/header.js"></script>
+    <script type="module" src="/js/pages/users/profile.js"></script>
     <title>2-KTB Community Project</title>
 </head>
 <body>
-    <site-header></site-header>
+    <login-header></login-header>
     <div class="wrap center column">
         <div class="container center column">
             <div id="nav" class="font24">회원정보 수정</div>
@@ -24,29 +25,23 @@
                             <label for="circle-img" class="font12-bold">프로필 사진</label>
                             <div class="center column">
                                 <div class="circle-img">
-                                    <input type="file" accept="image/*">
+                                    <input type="file"/>
                                 </div>
                             </div>
                         </div>
                         <div class="input-component">
-                            <label for="email" class="font12-bold">
-                                이메일<strong>*</strong>
-                            </label>
-                            <div id="email" class="font12">
-                                startupcode@gmail.com
-                            </div>
+                            <label for="email" class="font12-bold">이메일<strong>*</strong></label>
+                            <div id="email" class="font12"></div>
                         </div>
                         <div class="input-component">
-                            <label for="nickname" class="font12-bold">
-                                닉네임<strong>*</strong>
-                            </label>
-                            <input id="nickname" type="text" class="font12" placeholder="스타트업코드" required />
+                            <label for="nickname" class="font12-bold">닉네임<strong>*</strong></label>
+                            <input id="nickname" type="text" class="font12" placeholder="닉네임을 입력해주세요." />
                         </div>
                     </div>
-                        <button type="submit" class="font12-bold">회원가입</button>
+                        <button type="submit" class="font12-bold">수정하기</button>
                 </form>
-                <div class="link-component center column">
-                    <a href="#" class="font12">회원 탈퇴</a>
+                <div class="link-component center column font12">
+                    회원 탈퇴
                 </div>
             </div>
         </div>

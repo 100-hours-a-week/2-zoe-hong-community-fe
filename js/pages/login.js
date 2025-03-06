@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('응답:', data);
       })
 
-      window.location.href = 'post/list.html';
+      window.location.href = 'posts/list.html';
     });
   } else {
     console.error('로그인 폼을 찾을 수 없습니다.');
@@ -40,7 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('redirect to Join page.');
       window.location.href = 'join.html';
     })
-    redirectToJoin.style.cursor = 'pointer';
   } else {
     console.error('회원가입 페이지로 이동하는 데 실패했습니다.');
   }

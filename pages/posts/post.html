@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="/css/reset.css"/>
+    <link rel="stylesheet" href="/css/components/post.css"/>
+    <script src="/js/components/header.js"></script>
+    <script type="module" src="/js/pages/posts/post.js"></script>
+    <title>2-KTB Community Project</title>
+</head>
+<body>
+    <back-login-header></back-login-header>
+    <div class="wrap center column">
+        <div class="container center column">
+            <div class="box-component-500 column">
+                <div class="post-container">
+                    <div class="post-title">
+                        <div class="title"></div>
+                        <div class="metatext">
+                            <div class="metatext-left">
+                                <div class="circle-img"></div>
+                                <div id="username"></div>
+                                <div id="date"></div>
+                            </div>
+                            <div class="metatext-right">
+                                <button class="small-button">수정</button>
+                                <button class="small-button">삭제</button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="hr-line"/>
+                    <div class="post-content">
+                        <div class="content-img"></div>
+                        <div class="content-text"></div>
+                    </div>
+                    <div class="post-metadata">
+                        <div class="post-metadata-card">
+                            <div>123</div>
+                            <div>좋아요수</div>
+                        </div>
+                        <div class="post-metadata-card">
+                            <div>123</div>
+                            <div>조회수</div>
+                        </div>
+                        <div class="post-metadata-card">
+                            <div>123</div>
+                            <div>댓글수</div>
+                        </div>
+                    </div>
+                </div>
+                <hr class="hr-line"/>
+                <div class="comment-input-container">
+                    <form class="card">
+                        <div class="comment-input-content">
+                            <textarea type="text" placeholder="댓글을 남겨주세요!" class="comment-input-field"></textarea>
+                        </div>
+                        <hr class="hr-line"/>
+                        <div class="comment-button right-align-container">
+                            <button class="color-button">댓글 등록</button>
+                        </div>
+                    </form>
+                    <div class="comment-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

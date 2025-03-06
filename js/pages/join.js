@@ -10,9 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (file) {
         profileImageFile = file;
         
-        const circleImg = document.querySelector('.circle-img');
-        if (circleImg) {
-          const plusIcon = circleImg.querySelector('.plus-icon');
+        const profileImg = document.querySelector('.circle-img');
+        if (profileImg) {
+          const plusIcon = profileImg.querySelector('.plus-icon');
           if (plusIcon) {
             plusIcon.style.display = 'none';
           }
@@ -30,12 +30,12 @@ document.addEventListener('DOMContentLoaded', () => {
           }
           reader.readAsDataURL(file);
           
-          const existingPreview = circleImg.querySelector('.preview-image');
+          const existingPreview = profileImg.querySelector('.preview-image');
           if (existingPreview) {
-            circleImg.removeChild(existingPreview);
+            profileImg.removeChild(existingPreview);
           }
           
-          circleImg.appendChild(previewImg);
+          profileImg.appendChild(previewImg);
         }
         
         console.log('이미지 선택됨:', file.name);
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
       event.preventDefault();
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-      const passwordCheck = document.getElementById('password_check').value;
+      const passwordCheck = document.getElementById('password-check').value;
       const nickname = document.getElementById('nickname').value;
       if(!email) {
         alert('이메일을 입력해주세요.');
@@ -82,7 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('redirect to Login page.');
       window.location.href = 'login.html';
     })
-    redirectToLogin.style.cursor = 'pointer';
   } else {
     console.error('로그인 페이지로 이동하는 데 실패했습니다.');
   };
