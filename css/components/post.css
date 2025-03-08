@@ -241,3 +241,10 @@
     border-radius: 5px;
     margin-top: 10px;
 }
+.post-metadata-card {
+    transition: all 0.1s ease;
+  }
+  .liked {
+    background-color: var(--light-purple);
+    font-weight: bold;
+  }

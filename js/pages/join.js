@@ -1,16 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
   const joinForm = document.querySelector('form');
   const redirectToLogin = document.querySelector('#redirectToLogin');
-  let profileImageFile = null;
+  let profileImage = null;
   
-  const imageInput = document.querySelector('.circle-img input[type="file"]');
+  const imageInput = document.querySelector('#profile-img input[type="file"]');
   if (imageInput) {
     imageInput.addEventListener('change', function(event) {
       const file = event.target.files[0];
       if (file) {
-        profileImageFile = file;
+        profileImage = file;
         
-        const profileImg = document.querySelector('.circle-img');
+        const profileImg = document.getElementById('profile-img');
         if (profileImg) {
           const plusIcon = profileImg.querySelector('.plus-icon');
           if (plusIcon) {
@@ -70,7 +70,25 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
         return;
       }
-      console.log('회원가입 시도: ', { email, password, passwordCheck, nickname});
+      
+      const joinForm = new FormData();
+      joinForm.append('email', email);
+      joinForm.append('password', password);
+      joinForm.append('nickname', nickname);
+      if (profileImage) {
+        joinForm.append('profileImg', profileImage);
+      }
+
+      console.log('회원가입 시도: ', { joinForm });
+      fetch('/api/join', {
+        method: 'POST',
+        body: joinForm
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('응답:', data);
+      })
+
       window.location.href = 'login.html';
     })
   } else {

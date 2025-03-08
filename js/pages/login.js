@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const loginForm = document.querySelector('#loginForm');
-  const redirectToJoin = document.querySelector('#redirectToJoin');
+  const loginForm = document.getElementById('login-form');
 
   if (loginForm) {
     loginForm.addEventListener('submit', function(event) {
@@ -15,14 +14,19 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('비밀번호를 입력해주세요.');
         return;
       }
-      console.log('로그인 시도:', { email, password });
 
+      const loginData = {
+        email: email,
+        password: password
+      }
+
+      console.log('로그인 시도:', { loginData });
       fetch('/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ loginData })
       })
       .then(response => response.json())
       .then(data => {

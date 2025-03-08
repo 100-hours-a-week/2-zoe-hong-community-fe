@@ -1,8 +1,10 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const passwordEditForm = document.querySelector('#password-form');
+import { currentUser } from '/js/data/data.js';
 
-  if (passwordEditForm) {
-    passwordEditForm.addEventListener('submit', function(event) {
+document.addEventListener('DOMContentLoaded', () => {
+  const editPassword = document.getElementById('edit-password');
+
+  if (editPassword) {
+    editPassword.addEventListener('submit', function(event) {
       event.preventDefault();
       const password = document.getElementById('password').value;
       const passwordCheck = document.getElementById('password-check').value;
@@ -20,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       console.log('비밀번호 수정:', { password, passwordCheck });
 
-      fetch('/api/users/password', {
+      fetch(`/api/user/password/${currentUser.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'

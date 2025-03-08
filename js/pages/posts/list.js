@@ -1,4 +1,5 @@
 import { postsData } from '/js/data/data.js';
+import { postCard } from './listCard.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const createPostButton = document.getElementById('createPost');
@@ -27,38 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
     cardList.className = 'card-list';
 
     const card = document.createElement('div');
-    card.className = 'card hover'; // hover 클래스 추가
+    card.className = 'card hover';
     card.setAttribute('post-id', post.id);
     
-    card.addEventListener('click', function() {
-      console.log(`게시물 ${post.id} 상세 페이지로 이동`);
-      window.location.href = `post.html?id=${post.id}`;
-    });
-
-    card.innerHTML = `
-      <div class="content">
-        <div class="title">
-          ${post.title}
-        </div>
-        <div class="metatext">
-          <div>
-            <span>좋아요 ${post.likeCount}</span>
-            <span>댓글 ${post.commentCount}</span>
-            <span>조회수 ${post.viewCount}</span>
-          </div>
-          <div>
-            ${post.createdAt}
-          </div>
-        </div>
-      </div>
-      <hr class="hr-line"/>
-      <div class="content">
-        <div class="user">
-          <div class="circle-img" ${post.user.profileImg ? `style="background-image: url('${post.user.profileImg}'); background-size: cover;"` : ''}></div>
-          <div class="user-name">${post.user.nickname}</div>
-        </div>
-      </div>
-    `;
+    postCard(post, card);
 
     cardList.appendChild(card);
     boxComponent.appendChild(cardList);
