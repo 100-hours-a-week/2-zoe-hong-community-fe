@@ -6,9 +6,8 @@
     <link rel="stylesheet" href="/css/main.css"/>
     <link rel="stylesheet" href="/css/reset.css"/>
     <link rel="stylesheet" href="/css/components/post.css"/>
-    <link rel="stylesheet" href="create.css"/>
     <script src="/js/components/header.js"></script>
-    <script src="/js/pages/post/create.js"></script>
+    <script type="module" src="/js/pages/posts/create.js"></script>
     <title>2-KTB Community Project</title>
 </head>
 <body>
@@ -16,22 +15,22 @@
     <div class="wrap center column">
         <div class="container center column">
             <div id="nav" class="font16-bold">게시글 작성</div>
-            <form class="box-component-500 column" action="#" method="post">
+            <form id="create-post" class="box-component-500 column">
                 <div class="post-create-box">
-                    <nav>제목<strong>*</strong></nav>
-                    <div class="post-create-subject">
+                    <nav for="title">제목<strong>*</strong></nav>
+                    <div class="post-create-title">
                         <input id="title" placeholder="제목을 입력해주세요. (최대 26글자)">
                     </div>
                 </div>
                 <div class="post-create-box">
-                    <nav>내용<strong>*</strong></nav>
+                    <nav for="content">내용<strong>*</strong></nav>
                     <div class="post-create-content">
                         <textarea id="content" placeholder="내용을 입력해주세요."></textarea>
                     </div>
                 </div>
                 <div class="post-create-box">
-                    <nav>이미지</nav>
-                    <input id="file" type="file"/>
+                    <nav for="image">이미지</nav>
+                    <input id="image" type="file"/>
                 </div>
                 <div class="button-container">
                     <button class="color-button">완료</button>

@@ -18,13 +18,16 @@
     background-color: white;
     border-radius: 10px;
 }
+.card.hover:hover {
+    cursor: pointer;
+}
 .card-list .card {
     box-shadow: 3px 4px 4px var(--gray);
 }
 .card > .content {
     padding: 20px;
 }
-.card > .content > .subject {
+.card > .content > .title {
     font-size: 16px;
     font-weight: 700;
     margin-bottom: 10px;
@@ -55,13 +58,7 @@
     border-radius: 50%;
     background-color: rgba(0, 0, 0, 0.25);
     position: relative;
-    cursor: pointer;
     display: inline-block;
-}
-.circle-img:hover {
-    transition: ease 0.3s;
-    scale: 1.05;
-    background-color: rgba(0, 0, 0, 0.2);
 }
 .color-button {
     width: 110px;
@@ -89,6 +86,7 @@
     background-color: white;
     font-size: 10px;
     padding: 2px;
+    cursor: pointer;
 }
 .post-container {
     width: 100%;
@@ -103,7 +101,7 @@
     flex-direction: column;
     gap: 10px;
 }
-.post-title > .subject {
+.post-title > .title {
     width: 100%;
     font-size: 16px;
     font-weight: 700;
@@ -120,14 +118,15 @@
 .post-content {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 15px;
     font-size: 12px;
-    line-height: 120%;
+    line-height: 150%;
 }
 .post-content > .content-img {
     width: 100%;
-    height: 150px;
+    height: auto;
     background-color: var(--gray);
+    display: flex;
 }
 .post-metadata {
     width: 100%;
@@ -135,6 +134,7 @@
     justify-content: center;
     align-items: center;
     gap: 5px;
+    padding-top: 20px;
 }
 .post-metadata-card {
     width: 60px;
@@ -164,14 +164,14 @@
     line-height: 120%;
     background: transparent;
 }
-.comment-input > .comment-button {
+.comment-button {
     padding: 5px;
 }
 .comment {
     width: 100%;
     margin: 20px 20px;
 }
-.comment-subject{
+.comment-title{
     display: flex;
     align-items: center;
     font-size: 12px;
@@ -180,7 +180,7 @@
 .comment-user {
     display: flex;
     align-items: center;
-    gap: 3px;
+    gap: 8px;
 }
 .comment-user > #username {
     font-weight: 700;
@@ -205,13 +205,13 @@
     font-size: 12px;
     font-weight: 700;
 }
-.post-create-subject {
+.post-create-title {
     width: 100%;
     border-top: 1px solid var(--gray);
     border-bottom: 1px solid var(--gray);
     padding: 10px 5px;
 }
-.post-create-subject > input {
+.post-create-title > input {
     width: 100%;
     border: none;
     outline: none;
@@ -241,3 +241,10 @@
     border-radius: 5px;
     margin-top: 10px;
 }
+.post-metadata-card {
+    transition: all 0.1s ease;
+  }
+  .liked {
+    background-color: var(--light-purple);
+    font-weight: bold;
+  }

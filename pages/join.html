@@ -1,29 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/main.css"/>
     <link rel="stylesheet" href="/css/reset.css"/>
     <link rel="stylesheet" href="/css/components/form.css"/>
-    <link rel="stylesheet" href="/css/components/input-img.css"/>
+    <link rel="stylesheet" href="/css/components/img.css"/>
     <script src="/js/components/header.js"></script>
     <script src="/js/pages/join.js"></script>
     <title>2-KTB Community Project</title>
 </head>
 <body>
-    <site-header></site-header>
+    <back-logout-header></back-logout-header>
     <div class="wrap center column">
         <div class="container center column">
             <div id="nav" class="font24">회원가입</div>
     
             <div class="box-component center column">
-                <form id="joinForm" action="#" method="post">
+                <form id="join-form" action="#" method="post">
                     <div class="input-list">
                         <div class="input-img-component">
-                            <label for="circle-img" class="font12-bold">프로필 사진</label>
+                            <label for="profile-img" class="font12-bold">프로필 사진</label>
                             <div class="center column">
-                                <div class="circle-img">
+                                <div id="profile-img" class="circle-img hover-action">
                                     <input type="file" accept="image/*">
                                     <div class="plus-icon"></div>
                                 </div>
@@ -42,10 +42,10 @@
                             <input id="password" type="password" class="font12" placeholder="비밀번호를 입력하세요" />
                         </div>
                         <div class="input-component">
-                            <label for="password_check" class="font12-bold">
+                            <label for="password-check" class="font12-bold">
                                 비밀번호 확인<strong>*</strong>
                             </label>
-                            <input id="password_check" type="password" class="font12" placeholder="비밀번호를 한번 더 입력하세요" />
+                            <input id="password-check" type="password" class="font12" placeholder="비밀번호를 한번 더 입력하세요" />
                         </div>
                         <div class="input-component">
                             <label for="nickname" class="font12-bold">
@@ -57,8 +57,8 @@
                     <button type="submit" class="font12-bold">회원가입</button>
                 </form>
 
-                <div class="link-component center column">
-                    <a href="login.html" class="font12">로그인하러 가기</a>
+                <div id="redirectToLogin" class="link-component center column font12">
+                    로그인하러 가기
                 </div>
             </div>
         </div>
