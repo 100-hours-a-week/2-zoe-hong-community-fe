@@ -1,11 +1,18 @@
 import { currentUser } from '/js/data/data.js';
+import { showToast } from '/js/components/toast.js';
 
 document.addEventListener('DOMContentLoaded', () => {  
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = '/css/components/toast.css';
+  document.head.appendChild(link);
+  
   const editProfile = document.getElementById('edit-profile');
   const profileImg = document.getElementById('profile-img');
   const email = document.getElementById('email');
   const nickname = document.getElementById('nickname');
   const deleteUser = document.getElementById('delete-user');
+  const deleteModal = document.getElementById('user-delete-modal');
   
   if (currentUser) {
     console.log('현재 사용자 정보:', currentUser);
@@ -66,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
       event.preventDefault();
       
       if (!nickname.value.trim()) {
-        alert('닉네임을 입력해주세요.');
+        showToast('닉네임을 입력해주세요.', 'error');
         nickname.focus();
         return;
       }
@@ -88,29 +95,34 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(response => response.json())
       .then(data => {
         console.log('응답:', data);
+        showToast('수정 완료', 'success');
       })
-      alert('회원정보가 수정되었습니다.');
-      window.location.href = '/pages/posts/list.html';
+      .finally(() => {
+        showToast('수정 완료', 'success');
+      })
     });
   }
   
-  if (deleteUser) {
+  // 회원 탈퇴
+  if (deleteUser && deleteModal) {
+    const handleUserDelete = () => {
+      fetch(`/api/users/${currentUser.id}`, {
+        method: 'DELETE'
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('탈퇴 응답:', data);
+      })
+      .finally(() => {
+        window.location.href = '/pages/login.html';
+      })
+    };
+    
+    deleteModal.setOnConfirm(handleUserDelete);
+    
     deleteUser.addEventListener('click', function(event) {
       event.preventDefault();
-      
-      if (confirm('정말로 회원 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
-        console.log('회원 탈퇴 처리');
-        
-        fetch(`/api/users/${currentUser.id}`, {
-          method: 'DELETE'
-        })
-        .then(response => response.json())
-        .then(data => {
-          console.log('탈퇴 응답:', data);
-        })
-      }
-      alert('회원 탈퇴가 완료되었습니다.');
-      window.location.href = '/pages/login.html';
+      deleteModal.openModal();
     });
   }
 });

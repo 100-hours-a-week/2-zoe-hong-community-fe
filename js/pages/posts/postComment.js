@@ -3,102 +3,82 @@ import { CommentInput } from "./postCommentInput.js";
 export function Comments(comments, postId, currentUser) {
   const commentListElement = document.getElementById("comment-list");
   const commentCountElement = document.getElementById("comment-count");
-  const deleteCommentModal = document.querySelector("custom-modal");
-  
-  commentCountElement.textContent = comments.length;
-
-  CommentInput(comments, postId, currentUser);
-
-  function createCommentElement(comment, isCurrentUser) {
-    const commentElement = document.createElement("div");
-    commentElement.className = "comment";
-    commentElement.dataset.commentId = comment.id;
-
-    const actionButtons = isCurrentUser
-      ? `
-      <div class="comment-actions" style="display: none;">
-        <button class="comment-edit-btn small-button">수정</button>
-        <button class="comment-delete-btn small-button">삭제</button>
-      </div>
-    `
-      : "";
-
-    commentElement.innerHTML = `
-      <div class="comment-title">
-        <div class="comment-user">
-          <div class="circle-img" ${
-            comment.user.profileImg
-              ? `style="background-image: url('${comment.user.profileImg}'); background-size: cover;"`
-              : ""
-          }></div>
-          <div id="username">${comment.user.nickname}</div>
-        </div>
-        <div class="comment-meta">
-          <div id="date">${comment.createdAt}</div>
-          ${actionButtons}
-        </div>
-      </div>
-      <div class="comment-content">
-        ${comment.content}
-      </div>
-    `;
-
-    if (isCurrentUser) {
-      commentElement.addEventListener("click", function (e) {
-        if (commentElement.querySelector(".comment-edit-form")) return;
-
-        const actionsDiv = commentElement.querySelector(".comment-actions");
-        const allActionDivs = document.querySelectorAll(".comment-actions");
-
-        allActionDivs.forEach((div) => {
-          if (div !== actionsDiv) {
-            div.style.display = "none";
-          }
-        });
-
-        actionsDiv.style.display =
-          actionsDiv.style.display === "none" ? "flex" : "none";
-      });
-    }
-
-    return commentElement;
-  }
 
   // 문서 클릭 시 모든 댓글 버튼 숨기기
-  document.addEventListener('click', function(e) {
-    if (!e.target.closest('.comment')) {
-      document.querySelectorAll('.comment-actions').forEach(div => {
-        div.style.display = 'none';
+  document.addEventListener("click", function (e) {
+    if (!e.target.closest(".comment")) {
+      document.querySelectorAll(".comment-actions").forEach((div) => {
+        div.style.display = "none";
       });
     }
   });
 
-  // 삭제 버튼 설정 함수 (중복 코드 제거)
+  // 댓글 입력
+  CommentInput(comments, postId, currentUser);
+
+  // 초기 댓글 로드
+  refreshComments(comments, postId, currentUser);
+}
+
+export function refreshComments(comments, postId, currentUser) {
+  const commentListElement = document.getElementById("comment-list");
+  const commentCountElement = document.getElementById("comment-count");
+  const deleteCommentModal = document.getElementById("comment-delete-modal");
+
+  commentListElement.innerHTML = "";
+
+  // 댓글 불러오기
+  comments
+    .slice()
+    .sort((a, b) => b.id - a.id) // ID 내림차순 정렬
+    .forEach((comment) => {
+      const isCurrentUser = comment.user.nickname === currentUser.nickname;
+      const commentElement = createCommentElement(comment, isCurrentUser);
+      commentListElement.appendChild(commentElement);
+
+      const deleteButton = commentElement.querySelector(".comment-delete-btn");
+      if (deleteButton && isCurrentUser) {
+        setupDeleteButton(deleteButton, commentElement, comment.id);
+      }
+
+      const editButton = commentElement.querySelector(".comment-edit-btn");
+      if (editButton && isCurrentUser) {
+        setupEditButton(editButton, commentElement, comment);
+      }
+    });
+
+  // 댓글 수 업데이트
+  commentCountElement.textContent = comments.length;
+
+  // 삭제 버튼 설정 함수
   function setupDeleteButton(button, commentElement, commentId) {
-    button.addEventListener("click", function(e) {
+    button.addEventListener("click", function (e) {
       e.stopPropagation();
       e.preventDefault();
-      
+
       if (deleteCommentModal) {
-        deleteCommentModal._confirmCallback = function() {
-          fetch(`/api/posts/${postId}/comments/${commentId}`, {
-            method: "DELETE"
+        deleteCommentModal.openModal();
+        deleteCommentModal.setOnConfirm(() => {
+          fetch(`/api/posts/${postId}/comment/${commentId}`, {
+            method: "DELETE",
           })
-            .then(response => response.json())
-            .then(data => { console.log("응답:", data); });
-          
-          commentElement.remove();
-          commentCountElement.textContent = 
-            parseInt(commentCountElement.textContent) - 1;
-            
-          deleteCommentModal._confirmCallback = null;
-        };
-        
-        if (typeof deleteCommentModal.openModal === 'function') {
-          deleteCommentModal.openModal();
-        } else {
-          console.error('모달에 openModal 메서드가 없습니다');
-        }
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("응답:", data);
+
+              // 댓글 배열에서 제거
+              const index = comments.findIndex((c) => c.id === commentId);
+              if (index !== -1) {
+                comments.splice(index, 1);
+              }
+
+              // 댓글 목록 새로고침
+              refreshComments(comments, postId, currentUser);
+            })
+            .catch((error) => {
+              console.error("댓글 삭제 중 오류가 발생했습니다:", error);
+            });
+        });
       }
     });
   }
@@ -107,66 +87,71 @@ export function Comments(comments, postId, currentUser) {
   function setupEditButton(button, commentElement, comment) {
     button.addEventListener("click", function (e) {
       e.stopPropagation();
-      const contentElement = commentElement.querySelector(".comment-content");
-      const originalContent = comment.content;
 
-      if (contentElement.querySelector("textarea")) return;
+      // 댓글 내용 업데이트
+      comment.content = newContent;
 
-      contentElement.innerHTML = `
-        <form class="comment-edit-form">
-          <textarea class="comment-edit-input">${originalContent}</textarea>
-          <div class="comment-edit-buttons">
-            <button type="button" class="cancel-edit">취소</button>
-            <button type="submit" class="save-edit">저장</button>
+      // 댓글 목록 새로고침
+      refreshComments(comments, postId, currentUser);
+    });
+  }
+}
+
+function createCommentElement(comment, isCurrentUser) {
+  const commentElement = document.createElement("div");
+  commentElement.className = "comment";
+  commentElement.dataset.commentId = comment.id;
+
+  const actionButtons = isCurrentUser
+    ? `
+    <div class="comment-actions" style="display: none;">
+      <button class="comment-edit-btn small-button">수정</button>
+      <button class="comment-delete-btn small-button">삭제</button>
+    </div>
+  `
+    : "";
+
+  commentElement.innerHTML = `
+    <div class="comment-box">
+      <div class="comment">
+        <div class="comment-title">
+          <div class="comment-user">
+            <div class="circle-img" ${
+              comment.user.profileImg
+                ? `style="background-image: url('${comment.user.profileImg}'); background-size: cover;"`
+                : ""
+            }></div>
+            <div id="username">${comment.user.nickname}</div>
           </div>
-        </form>
-      `;
+          <div class="comment-meta">
+            <div id="date">${comment.createdAt}</div>
+            </div>
+        </div>
+        <div class="comment-content">
+          ${comment.content}
+        </div>
+      </div>
+      ${actionButtons}
+    </div>
+  `;
 
-      contentElement
-        .querySelector(".comment-edit-form")
-        .addEventListener("click", (e) => e.stopPropagation());
+  if (isCurrentUser) {
+    commentElement.addEventListener("click", function (e) {
+      if (commentElement.querySelector(".comment-edit-form")) return;
 
-      contentElement
-        .querySelector(".cancel-edit")
-        .addEventListener("click", function (e) {
-          e.stopPropagation();
-          contentElement.innerHTML = originalContent;
-        });
+      const actionsDiv = commentElement.querySelector(".comment-actions");
+      const allActionDivs = document.querySelectorAll(".comment-actions");
 
-      const editForm = contentElement.querySelector(".comment-edit-form");
-      editForm.addEventListener("submit", function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        const newContent = editForm
-          .querySelector(".comment-edit-input")
-          .value.trim();
-
-        if (!newContent) {
-          alert("댓글 내용을 입력해주세요.");
-          return;
+      allActionDivs.forEach((div) => {
+        if (div !== actionsDiv) {
+          div.style.display = "none";
         }
-
-        comment.content = newContent;
-        contentElement.innerHTML = newContent;
-        console.log(`댓글 ${comment.id} 수정됨: ${newContent}`);
       });
+
+      actionsDiv.style.display =
+        actionsDiv.style.display === "none" ? "flex" : "none";
     });
   }
 
-  // 댓글 데이터 불러오기
-  comments.forEach((comment) => {
-    const isCurrentUser = comment.user.nickname === currentUser.nickname;
-    const commentElement = createCommentElement(comment, isCurrentUser);
-    commentListElement.appendChild(commentElement);
-
-    const deleteButton = commentElement.querySelector(".comment-delete-btn");
-    if (deleteButton) {
-      setupDeleteButton(deleteButton, commentElement, comment.id);
-    }
-
-    const editButton = commentElement.querySelector(".comment-edit-btn");
-    if (editButton) {
-      setupEditButton(editButton, commentElement, comment);
-    }
-  });
+  return commentElement;
 }

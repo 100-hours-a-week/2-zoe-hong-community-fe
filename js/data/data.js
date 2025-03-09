@@ -106,11 +106,11 @@ export const postDetailData = [
       },
       {
         id: 3,
-        content: "우리 동네에 이런 커뮤니티가 있어서 정말 좋네요. 자주 참여하겠습니다!",
-        createdAt: "2025-03-01 14:05:17",
+        content: "안녕하세요! 새로 가입한 사용자입니다. 앞으로 잘 부탁드립니다!",
+        createdAt: "2025-03-01 16:30:45",
         user: {
-          nickname: "지역주민",
-          profileImg: "/images/profiles/local.jpg"
+          nickname: "사용자",
+          profileImg: "/assets/image/image01.jpg"
         }
       }
     ]

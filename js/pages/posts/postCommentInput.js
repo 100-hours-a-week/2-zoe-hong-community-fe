@@ -1,167 +1,123 @@
 export function CommentInput(comments, postId, currentUser) {
   const commentListElement = document.getElementById("comment-list");
   const commentCountElement = document.getElementById("comment-count");
-  const commentForm = document.querySelector(".comment-input-container form");
-  const commentInput = document.querySelector(".comment-input-field");
-  const deleteCommentModal = document.getElementById('comment-delete-modal');
+  const commentForm = document.getElementById("comment-card");
+  const commentInput = commentForm ? commentForm.querySelector(".comment-input-field") : null;
+  const submitButton = commentForm ? commentForm.querySelector(".color-button") : null;
+  
+  // 현재 수정 중인 댓글 정보 
+  let editingCommentId = null;
 
-  if (!commentForm || !commentInput) {
-    console.error('댓글 입력 폼을 찾을 수 없습니다.');
+  if (!commentForm || !commentInput || !submitButton) {
+    console.error("댓글 입력 폼을 찾을 수 없습니다.");
     return;
   }
+
+  // 댓글 입력 모드 설정
+  window.setCommentEditMode = function(comment) {
+    if (!comment) {
+      // 일반 댓글 입력 모드로 전환
+      editingCommentId = null;
+      commentInput.value = "";
+      submitButton.textContent = "댓글 등록";
+      return;
+    }
+    
+    // 수정 모드로 전환
+    editingCommentId = comment.id;
+    commentInput.value = comment.content;
+    commentInput.focus();
+    submitButton.textContent = "댓글 수정";
+    
+    // 스크롤을 입력 폼으로 이동
+    commentForm.scrollIntoView({ behavior: 'smooth' });
+  };
 
   commentForm.addEventListener("submit", function (e) {
     e.preventDefault();
 
-    const commentText = commentInput.value.trim();
-    if (!commentText) {
+    const content = commentInput.value.trim();
+    if (!content) {
       alert("댓글 내용을 입력해주세요.");
       return;
     }
-
-    const now = new Date();
-    const formattedDate = now.toISOString().replace("T", " ").substring(0, 19);
-
-    const newComment = {
-      id: comments.length > 0 ? Math.max(...comments.map((c) => c.id)) + 1 : 1,
-      content: commentText,
-      createdAt: formattedDate,
-      user: {
-        nickname: currentUser.nickname,
-        profileImg: currentUser.profileImg,
-      },
-    };
-
-    function createCommentElement(comment, isCurrentUser) {
-      const commentElement = document.createElement("div");
-      commentElement.className = "comment";
-      commentElement.dataset.commentId = comment.id;
-  
-      const actionButtons = isCurrentUser
-        ? `
-        <div class="comment-actions" style="display: none;">
-          <button class="comment-edit-btn small-button">수정</button>
-          <button class="comment-delete-btn small-button">삭제</button>
-        </div>
-      `
-        : "";
-  
-      commentElement.innerHTML = `
-        <div class="comment-title">
-          <div class="comment-user">
-            <div class="circle-img" ${
-              comment.user.profileImg
-                ? `style="background-image: url('${comment.user.profileImg}'); background-size: cover;"`
-                : ""
-            }></div>
-            <div id="username">${comment.user.nickname}</div>
-          </div>
-          <div class="comment-meta">
-            <div id="date">${comment.createdAt}</div>
-            ${actionButtons}
-          </div>
-        </div>
-        <div class="comment-content">
-          ${comment.content}
-        </div>
-      `;
-  
-      if (isCurrentUser) {
-        commentElement.addEventListener("click", function (e) {
-          if (commentElement.querySelector(".comment-edit-form")) return;
-  
-          const actionsDiv = commentElement.querySelector(".comment-actions");
-          const allActionDivs = document.querySelectorAll(".comment-actions");
-  
-          allActionDivs.forEach((div) => {
-            if (div !== actionsDiv) {
-              div.style.display = "none";
-            }
-          });
-  
-          actionsDiv.style.display =
-            actionsDiv.style.display === "none" ? "flex" : "none";
-        });
-      }
-  
-      return commentElement;
-    }
-
-    const commentElement = createCommentElement(newComment, true);
-    commentListElement.prepend(commentElement);
-
-    // 삭제 버튼 설정
-    const deleteButton = commentElement.querySelector(".comment-delete-btn");
-    if (deleteButton) {
-      deleteButton.addEventListener("click", function(e) {
-        e.stopPropagation();
-        e.preventDefault();
-        deleteCommentModal.openModal();
-      });
-    }
-    if (deleteCommentModal) {
-      deleteCommentModal.setOnConfirm(() => {
-        fetch(`/api/posts/${postId}/comments/${comment.id}`, {
-          method: "DELETE",
+    
+    if (editingCommentId) {
+      // 수정 모드
+      const editingComment = comments.find(c => c.id === editingCommentId);
+      if (editingComment) {
+        fetch(`/api/posts/${postId}/comment/${editingCommentId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ content }),
         })
           .then((response) => response.json())
           .then((data) => {
-            console.log("응답:", data);
+            console.log("수정 응답:", data);
+            
+            // 댓글 내용 업데이트
+            editingComment.content = content;
+            
+            // 일반 모드로 전환
+            window.setCommentEditMode(null);
+            
+            // 댓글 목록 새로고침
+            window.refreshComments(comments, postId, currentUser);
+          })
+          .catch(error => {
+            console.error("댓글 수정 중 오류가 발생했습니다:", error);
+            
+            // 서버 연결 없을 때 임시 대응
+            editingComment.content = content;
+            window.setCommentEditMode(null);
+            window.refreshComments(comments, postId, currentUser);
           });
-        window.location.href = `/pages/post.html?=${postId}`;
-      });
-    }
+      }
+    } else {
+      // 새 댓글 작성 모드
+      const now = new Date();
+      const formattedDate = now.toISOString().replace("T", " ").substring(0, 19);
 
-    // 수정 버튼 설정
-    const editButton = commentElement.querySelector(".comment-edit-btn");
-    if (editButton) {
-      editButton.addEventListener("click", function (e) {
-        e.stopPropagation();
-        const contentElement = commentElement.querySelector(".comment-content");
-        const originalContent = newComment.content;
+      const newComment = {
+        id: comments.length > 0 ? Math.max(...comments.map((c) => c.id)) + 1 : 1,
+        content: content,
+        createdAt: formattedDate,
+        user: {
+          nickname: currentUser.nickname,
+          profileImg: currentUser.profileImg,
+        },
+      };
 
-        contentElement.innerHTML = `
-          <form class="comment-edit-form">
-            <textarea class="comment-edit-input">${originalContent}</textarea>
-            <div class="comment-edit-buttons">
-              <button type="button" class="cancel-edit">취소</button>
-              <button type="submit" class="save-edit">저장</button>
-            </div>
-          </form>
-        `;
-
-        contentElement
-          .querySelector(".comment-edit-form")
-          .addEventListener("click", (e) => e.stopPropagation());
-
-        contentElement
-          .querySelector(".cancel-edit")
-          .addEventListener("click", function (e) {
-            e.stopPropagation();
-            contentElement.innerHTML = originalContent;
-          });
-
-        const editForm = contentElement.querySelector(".comment-edit-form");
-        editForm.addEventListener("submit", function (e) {
-          e.preventDefault();
-          e.stopPropagation();
-          const updatedContent = editForm
-            .querySelector(".comment-edit-input")
-            .value.trim();
-
-          if (!updatedContent) {
-            alert("댓글 내용을 입력해주세요.");
-            return;
-          }
-
-          newComment.content = updatedContent;
-          contentElement.innerHTML = updatedContent;
+      fetch(`/api/posts/${postId}/comment`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ content }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("등록 응답:", data);
+          
+          // 댓글 배열에 추가
+          comments.push(newComment);
+          
+          // 입력창 초기화
+          commentInput.value = "";
+          
+          // 댓글 목록 새로고침
+          window.refreshComments(comments, postId, currentUser);
+        })
+        .catch(error => {
+          console.error("댓글 등록 중 오류가 발생했습니다:", error);
+          
+          // 서버 연결 없을 때 임시 대응
+          comments.push(newComment);
+          commentInput.value = "";
+          window.refreshComments(comments, postId, currentUser);
         });
-      });
     }
-
-    commentInput.value = "";
-    commentCountElement.textContent =
-      parseInt(commentCountElement.textContent) + 1;
   });
 }
