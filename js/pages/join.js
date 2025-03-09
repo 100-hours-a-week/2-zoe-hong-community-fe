@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (redirectToLogin) {
     redirectToLogin.addEventListener('click', function(event) {
       console.log('redirect to Login page.');
-      window.location.href = 'login.html';
+      window.location.href = '/pages/login.html';
     })
   } else {
     console.error('로그인 페이지로 이동하는 데 실패했습니다.');
