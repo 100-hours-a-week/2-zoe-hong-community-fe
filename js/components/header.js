@@ -5,11 +5,15 @@ class LogoutHeaderComponent extends HTMLElement {
       @import "/css/components/header.css";
     </style>
     <header class="header">
-      <div class="logo font24 black">
+      <div class="logo font24 black" style="cursor:pointer">
         <div>아무 말 대잔치</div>
       </div>
     </header>
     `;
+    
+    this.querySelector('.logo').addEventListener('click', () => {
+      window.location.href = '/pages/login.html';
+    });
   }
 }
 
@@ -21,26 +25,27 @@ class BackLogoutHeaderComponent extends HTMLElement {
     </style>
     <header class="header">
       <div class="back-button" onclick="history.back()">&lt;</div>
-      <div class="logo font24 black">
+      <div class="logo font24 black" style="cursor:pointer">
         <div>아무 말 대잔치</div>
       </div>
     </header>
     `;
+    
+    this.querySelector('.logo').addEventListener('click', () => {
+      window.location.href = '/pages/login.html';
+    });
   }
 }
 
 class LoginHeaderComponent extends HTMLElement {
   connectedCallback() {
-    // 데이터 파일에서 정보 가져오기
-    import('/js/data/data.js')
+    import('/data/data.js')
       .then(module => {
-        // 현재 사용자 정보 가져오기
         const { currentUser } = module;
         this.renderHeader(currentUser);
       })
       .catch(error => {
         console.error('데이터 로드 실패:', error);
-        // 에러 발생 시 기본 이미지 사용
         this.renderHeader({ profileImg: '/assets/user-profile.jpg' });
       });
   }
@@ -53,7 +58,7 @@ class LoginHeaderComponent extends HTMLElement {
       @import "/css/components/header.css";
     </style>
     <header class="header">
-      <div class="logo font24 black">
+      <div class="logo font24 black" style="cursor:pointer">
         <div>아무 말 대잔치</div>
       </div>
       <div class="profile-container">
@@ -69,6 +74,10 @@ class LoginHeaderComponent extends HTMLElement {
       </div>
     </header>
     `;
+
+    this.querySelector('.logo').addEventListener('click', () => {
+      window.location.href = '/pages/posts/list.html';
+    });
 
     const profileImg = this.querySelector('.profile-img');
     const dropdownMenu = this.querySelector('.dropdown-menu');
@@ -115,7 +124,7 @@ class LoginHeaderComponent extends HTMLElement {
 
 class BackLoginHeaderComponent extends HTMLElement {
   connectedCallback() {
-    import('/js/data/data.js')
+    import('/data/data.js')
       .then(module => {
         const { currentUser } = module;
         this.renderHeader(currentUser);
@@ -135,7 +144,7 @@ class BackLoginHeaderComponent extends HTMLElement {
     </style>
     <header class="header">
       <div class="back-button" onclick="history.back()">&lt;</div>
-      <div class="logo font24 black">
+      <div class="logo font24 black" style="cursor:pointer">
         <div>아무 말 대잔치</div>
       </div>
       <div class="profile-container">
@@ -151,6 +160,10 @@ class BackLoginHeaderComponent extends HTMLElement {
       </div>
     </header>
     `;
+
+    this.querySelector('.logo').addEventListener('click', () => {
+      window.location.href = '/pages/posts/list.html';
+    });
 
     const profileImg = this.querySelector('.profile-img');
     const dropdownMenu = this.querySelector('.dropdown-menu');

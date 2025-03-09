@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const joinForm = document.querySelector('form');
-  const redirectToLogin = document.querySelector('#redirectToLogin');
+  const joinForm = document.getElementById('join-form');
+  const redirectToLogin = document.getElementById('redirectToLogin');
   let profileImage = null;
   
   const imageInput = document.querySelector('#profile-img input[type="file"]');
@@ -34,10 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
           if (existingPreview) {
             profileImg.removeChild(existingPreview);
           }
-          
           profileImg.appendChild(previewImg);
         }
-        
         console.log('이미지 선택됨:', file.name);
       }
     });
@@ -51,23 +49,23 @@ document.addEventListener('DOMContentLoaded', () => {
       const passwordCheck = document.getElementById('password-check').value;
       const nickname = document.getElementById('nickname').value;
       if(!email) {
-        alert('이메일을 입력해주세요.');
+        // 검증 코드
         return;
       }
       if(!password) {
-        alert('비밀번호를 입력해주세요.');
+        // 검증 코드
         return;
       }
       if(!passwordCheck) {
-        alert('비밀번호 확인을 입력해주세요.');
+        // 검증 코드
         return;
       }
       if(!nickname) {
-        alert('닉네임을 입력해주세요.');
+        // 검증 코드
         return;
       }
       if(password !== passwordCheck) {
-        alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
+        // 검증 코드
         return;
       }
       
@@ -87,9 +85,13 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(response => response.json())
       .then(data => {
         console.log('응답:', data);
+        window.location.href = '/pages/login.html';
       })
-
-      window.location.href = 'login.html';
+      .catch(error => {
+        console.error('오류 발생:', error);
+        // 임시
+        window.location.href = '/pages/login.html';
+      })
     })
   } else {
     console.error('회원가입 폼을 찾을 수 없습니다.')
@@ -97,7 +99,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (redirectToLogin) {
     redirectToLogin.addEventListener('click', function(event) {
-      console.log('redirect to Login page.');
       window.location.href = '/pages/login.html';
     })
   } else {

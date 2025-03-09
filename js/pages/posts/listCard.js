@@ -1,6 +1,6 @@
 export function postCard(post, card) {
   card.addEventListener('click', function() {
-    window.location.href = `post.html?id=${post.id}`;
+    window.location.href = `/pages/posts/post.html?id=${post.id}`;
   });
 
   card.innerHTML = `
@@ -22,7 +22,11 @@ export function postCard(post, card) {
     <hr class="hr-line"/>
     <div class="content">
       <div class="user">
-        <div class="circle-img" ${post.user.profileImg ? `style="background-image: url('${post.user.profileImg}'); background-size: cover;"` : ''}></div>
+        <div class="circle-img"${post.user.profileImg
+          ? `style="background-image: url('${post.user.profileImg}'); background-size: cover;"`
+          : ''}
+        >
+        </div>
         <div class="user-name">${post.user.nickname}</div>
       </div>
     </div>

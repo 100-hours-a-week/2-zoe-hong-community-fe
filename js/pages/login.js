@@ -11,12 +11,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const password = passwordInput.value;
       
       if (!email) {
-        alert('이메일을 입력해주세요.');
+        // 검증 텍스트
         return;
       }
       
       if (!password) {
-        alert('비밀번호를 입력해주세요.');
+        // 검증 텍스트
         return;
       }
  
@@ -43,11 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('응답:', data);
         window.location.href = '/pages/posts/list.html';
       })
-      // .catch(error => {
-      //   console.error('로그인 오류:', error);
-      // })
-      .finally(() => {
-        // window.location.href = '/pages/posts/list.html';
+      .catch(error => {
+        console.error('오류 발생:', error);
+        // 임시
+        window.location.href = '/pages/posts/list.html';
       });
     });
   } else {
@@ -57,7 +56,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const redirectToJoin = document.getElementById('redirectToJoin');
   if (redirectToJoin) {
     redirectToJoin.addEventListener('click', function(event) {
-      console.log('redirect to Join page.');
       window.location.href = '/pages/join.html';
     });
   } else {

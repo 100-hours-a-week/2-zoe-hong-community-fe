@@ -1,4 +1,4 @@
-import { postDetailData } from '/js/data/data.js';
+import { postDetailData } from '/data/data.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!postId) {
     console.error('유효하지 않은 게시물 ID입니다.');
     alert('수정할 게시물을 찾을 수 없습니다.');
-    window.location.href = `post.html?id=${postId}`;
+    window.location.href = `/pages/posts/post.html?id=${postId}`;
     return;
   }
 
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!post) {
     console.error(`ID ${postId}에 해당하는 게시물을 찾을 수 없습니다.`);
     alert('수정할 게시물을 찾을 수 없습니다.');
-    window.location.href = `post.html?id=${postId}`;
+    window.location.href = `/pages/posts/post.html?id=${postId}`;
     return;
   }
   
@@ -43,12 +43,11 @@ document.addEventListener('DOMContentLoaded', () => {
       event.preventDefault();
       
       if (!title.value.trim()) {
-        alert('제목을 입력해주세요.');
+        // 검증 코드
         return;
       }
-      
       if (!content.value.trim()) {
-        alert('내용을 입력해주세요.');
+        // 검증 코드
         return;
       }
       
@@ -68,10 +67,13 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(response => response.json())
       .then(data => {
         console.log('응답:', data);
+        window.location.href = `/pages/posts/post.html?id=${postId}`;
       })
-      
-      alert('게시물이 수정되었습니다.');
-      window.location.href = `post.html?id=${postId}`;
+      .catch(error => {
+        console.error('오류 발생:', error);
+        // 임시
+        window.location.href = `/pages/posts/post.html?id=${postId}`;
+      })
     });
   } else {
     console.error('수정 폼을 찾을 수 없습니다.');
