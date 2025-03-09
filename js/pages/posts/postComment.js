@@ -1,10 +1,6 @@
 import { CommentInput } from "./postCommentInput.js";
 
 export function Comments(comments, postId, currentUser) {
-  const commentListElement = document.getElementById("comment-list");
-  const commentCountElement = document.getElementById("comment-count");
-
-  // 문서 클릭 시 모든 댓글 버튼 숨기기
   document.addEventListener("click", function (e) {
     if (!e.target.closest(".comment")) {
       document.querySelectorAll(".comment-actions").forEach((div) => {
@@ -13,14 +9,12 @@ export function Comments(comments, postId, currentUser) {
     }
   });
 
-  // 댓글 입력
   CommentInput(comments, postId, currentUser);
-
-  // 초기 댓글 로드
   refreshComments(comments, postId, currentUser);
 }
 
 export function refreshComments(comments, postId, currentUser) {
+  console.log(comments);
   const commentListElement = document.getElementById("comment-list");
   const commentCountElement = document.getElementById("comment-count");
   const deleteCommentModal = document.getElementById("comment-delete-modal");
@@ -47,10 +41,8 @@ export function refreshComments(comments, postId, currentUser) {
       }
     });
 
-  // 댓글 수 업데이트
   commentCountElement.textContent = comments.length;
 
-  // 삭제 버튼 설정 함수
   function setupDeleteButton(button, commentElement, commentId) {
     button.addEventListener("click", function (e) {
       e.stopPropagation();
@@ -72,7 +64,6 @@ export function refreshComments(comments, postId, currentUser) {
                 comments.splice(index, 1);
               }
 
-              // 댓글 목록 새로고침
               refreshComments(comments, postId, currentUser);
             })
             .catch((error) => {
@@ -88,10 +79,7 @@ export function refreshComments(comments, postId, currentUser) {
     button.addEventListener("click", function (e) {
       e.stopPropagation();
 
-      // 댓글 내용 업데이트
       comment.content = newContent;
-
-      // 댓글 목록 새로고침
       refreshComments(comments, postId, currentUser);
     });
   }

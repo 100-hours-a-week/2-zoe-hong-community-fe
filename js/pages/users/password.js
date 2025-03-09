@@ -1,43 +1,60 @@
-import { currentUser } from '/js/data/data.js';
+import { currentUser } from '/data/data.js';
+import { showToast } from '/js/components/toast.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  const editPassword = document.getElementById('edit-password');
-
-  if (editPassword) {
-    editPassword.addEventListener('submit', function(event) {
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = '/css/components/toast.css';
+  document.head.appendChild(link);
+  
+  const editPasswordForm = document.getElementById('edit-password');
+  const passwordInput = document.getElementById('password');
+  const passwordCheckInput = document.getElementById('password-check');
+  
+  if (editPasswordForm) {
+    editPasswordForm.addEventListener('submit', function(event) {
       event.preventDefault();
-      const password = document.getElementById('password').value;
-      const passwordCheck = document.getElementById('password-check').value;
+      
+      const password = passwordInput.value;
+      const passwordCheck = passwordCheckInput.value;
+      
       if (!password) {
-        alert('비밀번호을 입력해주세요.');
+        // 검증 코드
         return;
       }
       if (!passwordCheck) {
-        alert('비밀번호 확인을 입력해주세요.');
+        // 검증 코드
         return;
       }
       if (password !== passwordCheck) {
-        alert('비밀번호와 비밀번호 확인이 일치하지 않습니다.');
+        // 검증 코드
         return;
       }
-      console.log('비밀번호 수정:', { password, passwordCheck });
-
-      fetch(`/api/user/password/${currentUser.id}`, {
+      
+      const passwordData = {
+        password: password
+      };
+      
+      console.log('비밀번호 수정 요청:', { userId: currentUser.id });
+      
+      fetch(`/api/users/password/${currentUser.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ password })
+        body: JSON.stringify(passwordData)
       })
       .then(response => response.json())
       .then(data => {
-        console.log('응답:', data);
+        console.log('비밀번호 수정 응답:', data);
+        showToast('수정 완료', 'success');
+        editPasswordForm.reset();
       })
-
-      alert('비밀번호를 수정하였습니다.');
-      window.location.href = '/pages/posts/list.html';
+      .catch(error => {
+        console.error('오류 발생:', error);
+        // 임시
+        showToast('수정 완료', 'success');
+      })
     });
-  } else {
-    console.error('로그인 폼을 찾을 수 없습니다.');
   }
 });

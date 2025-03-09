@@ -1,11 +1,10 @@
-import { postDetailData, currentUser } from "/js/data/data.js";
+import { postDetailData, currentUser } from "/data/data.js";
 import { Comments } from "/js/pages/posts/postComment.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   // url에서 id 값 가져오기
   const urlParams = new URLSearchParams(window.location.search);
   const postId = parseInt(urlParams.get("id"));
-
   if (!postId) {
     console.error("유효하지 않은 게시물 ID입니다.");
     return;
@@ -31,10 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // 내용
-  document.getElementById("content-text").innerHTML = post.content.replace(
-    /\n/g,
-    "<br/>"
-  );
+  document.getElementById("content-text").innerHTML = post.content.replace(/\n/g, "<br/>");
   const contentImgElement = document.getElementById("content-img");
   if (post.image) {
     const img = document.createElement("img");
@@ -58,14 +54,12 @@ document.addEventListener("DOMContentLoaded", () => {
       window.location.href = `edit.html?id=${postId}`;
     });
   }
-
   if (deleteButton) {
     deleteButton.addEventListener("click", function (e) {
       e.preventDefault();
       deletePostModal.openModal();
     });
   }
-  
   if (deletePostModal) {
     deletePostModal.setOnConfirm(() => {
       fetch(`/api/posts/${postId}`, {
@@ -93,12 +87,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let isLiked = false;
   const likeCard = likeCount.parentElement;
   likeCard.style.cursor = "pointer";
-
-  const likeKey = `post_${postId}_liked`;
-  if (localStorage.getItem(likeKey) === "true") {
-    isLiked = true;
-    likeCard.classList.add("liked");
-  }
 
   likeCard.addEventListener("click", function () {
     isLiked = !isLiked;

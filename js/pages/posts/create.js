@@ -16,11 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const content = document.getElementById('content').value;
 
       if(!title) {
-        alert('제목을 입력해주세요.');
+        // 검증 코드
         return;
       }
       if(!content) {
-        alert('내용을 입력해주세요.');
+        // 검증 코드
         return;
       }
 
@@ -34,16 +34,21 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       console.log('게시물 생성 시도: ', { postData });
-      fetch('/api/posts/create', {
+      fetch('/api/posts', {
         method: 'POST',
         body: postData
       })
       .then(response => response.json())
       .then(data => {
         console.log('응답:', data);
+        // 서버와 연결한 이후, 해당 id의 게시물 조회 페이지로 이동하도록 변경
+        window.location.href = '/pages/posts/list.html';
       })
-
-      window.location.href = '/pages/posts/list.html';
+      .catch(error => {
+        console.error('오류 발생:', error);
+        // 임시
+        window.location.href = '/pages/posts/list.html';
+      })
     })
   } else {
     console.error('회원가입 폼을 찾을 수 없습니다.')
