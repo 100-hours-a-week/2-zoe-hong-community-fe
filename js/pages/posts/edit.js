@@ -1,4 +1,4 @@
-import { ROUTES } from '/js/config.js';
+import { ROUTES, ENDPOINT } from '/js/config.js';
 import { postDetailData } from '/data/data.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
         postForm.append('image', post.image);
       }
 
-      fetch(`/api/posts/${postId}`, {
+      fetch(ENDPOINT.UPDATE_POST(postId), {
         method: 'PATCH',
         body: postForm
       })

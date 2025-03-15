@@ -1,4 +1,4 @@
-import { ROUTES } from '/js/config.js';
+import { ROUTES, ENDPOINT } from "/js/config.js";
 import { currentUser } from "/data/data.js";
 import { showToast } from "/js/components/toast.js";
 
@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
         profileData.append("profileImg", currentUser.profileImg);
       }
 
-      fetch(`/api/users/profile/${currentUser.id}`, {
+      fetch(ENDPOINT.UPDATE_USER_INFO, {
         method: "PATCH",
         body: profileData,
       })

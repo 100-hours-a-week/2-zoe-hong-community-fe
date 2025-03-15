@@ -1,4 +1,4 @@
-import { ROUTES } from '/js/config.js';
+import { ROUTES, ENDPOINT } from "/js/config.js";
 import { postDetailData, currentUser } from "/data/data.js";
 import { Comments } from "/js/pages/posts/postComment.js";
 
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   if (deletePostModal) {
     deletePostModal.setOnConfirm(() => {
-      fetch(`/api/posts/${postId}`, {
+      fetch(ENDPOINT.GET_POST_DETAIL(postId), {
         method: "DELETE",
       })
         .then((response) => response.json())
@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
   likeCard.addEventListener("click", function () {
     isLiked = !isLiked;
 
-    fetch(`/api/posts/${postId}/like`, {
+    fetch(ENDPOINT.LIKE_POST(postId), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -1,3 +1,4 @@
+import { ENDPOINT } from "/js/config.js";
 import { currentUser } from '/data/data.js';
 import { showToast } from '/js/components/toast.js';
 
@@ -37,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
       
       console.log('비밀번호 수정 요청:', { userId: currentUser.id });
       
-      fetch(`/api/users/password/${currentUser.id}`, {
+      fetch(ENDPOINT.UPDATE_PASSWORD(currentUser.id), {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json'

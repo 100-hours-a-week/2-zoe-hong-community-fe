@@ -1,3 +1,4 @@
+import { ENDPOINT } from '/js/config.js';
 import { ROUTES } from '/js/config.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -80,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       console.log('회원가입 시도: ', { joinForm });
-      fetch('/api/users', {
+      fetch(ENDPOINT.JOIN, {
         method: 'POST',
         body: joinForm
       })

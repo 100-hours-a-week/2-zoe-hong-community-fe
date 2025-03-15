@@ -1,4 +1,4 @@
-import { ROUTES } from "/js/config.js";
+import { ROUTES, ENDPOINT } from "/js/config.js";
 
 document.addEventListener('DOMContentLoaded', () => {
   const createPost = document.getElementById('create-post');
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       console.log('게시물 생성 시도: ', { postData });
-      fetch('/api/posts', {
+      fetch(ENDPOINT.CREATE_POST, {
         method: 'POST',
         body: postData
       })

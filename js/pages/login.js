@@ -1,3 +1,4 @@
+import { ENDPOINT } from '/js/config.js';
 import { ROUTES } from '/js/config.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -28,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
       };
  
       console.log('로그인 시도:', { loginData });
-      fetch('/api/login', {
+      fetch(ENDPOINT.LOGIN, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

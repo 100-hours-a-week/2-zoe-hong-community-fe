@@ -1,3 +1,5 @@
+import { ENDPOINT } from "/js/config.js";
+
 export function CommentInput(comments, postId, currentUser) {
   const commentForm = document.getElementById("comment-card");
   const commentInput = commentForm ? commentForm.querySelector(".comment-input-field") : null;
@@ -31,7 +33,7 @@ export function CommentInput(comments, postId, currentUser) {
       },
     };
 
-    fetch(`/api/posts/${postId}/comment`, {
+    fetch(ENDPOINT.CREATE_COMMENT(postId), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
