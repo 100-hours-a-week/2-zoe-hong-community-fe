@@ -1,5 +1,5 @@
-import { postRequest } from '../utils/api';
 import { ROUTES, ENDPOINT } from '/js/config.js';
+import { postRequest } from '/js/utils/api.js';
 import { validateEmail, validatePassword } from '/js/utils/loginUtil.js';
 import { showErrorMessage, clearErrorMessage } from '/js/utils/util.js';
 

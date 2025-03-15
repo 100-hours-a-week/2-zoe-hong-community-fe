@@ -1,5 +1,7 @@
+import { validatePost } from "/js/utils/postUtil.js";
 import { ROUTES, ENDPOINT } from "/js/config.js";
 import { postRequest } from "/js/utils/api.js";
+import { showErrorMessage, clearErrorMessage } from '/js/utils/util.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const createPost = document.getElementById('create-post');
@@ -18,13 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const title = document.getElementById('title').value;
       const content = document.getElementById('content').value;
 
-      if(!title) {
-        // 검증 코드
+      const validation = validatePost(title, content);
+      if (!validation.valid) {
+        showErrorMessage('create-post', validation.message);
         return;
-      }
-      if(!content) {
-        // 검증 코드
-        return;
+      } else {
+        clearErrorMessage('create-post');
       }
 
       const postData = new FormData();
