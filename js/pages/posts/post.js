@@ -92,25 +92,39 @@ document.addEventListener("DOMContentLoaded", () => {
   likeCard.addEventListener("click", function () {
     isLiked = !isLiked;
 
-    fetch(ENDPOINT.LIKE_POST(postId), {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        liked: isLiked,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("응답:", data);
-      });
-
     if (isLiked) {
+      fetch(ENDPOINT.LIKE_POST(postId), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          liked: isLiked,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("응답:", data);
+        });
+
       likeCount.textContent = parseInt(likeCount.textContent) + 1;
       likeCard.classList.add("liked");
       localStorage.setItem(likeKey, "true");
     } else {
+      fetch(ENDPOINT.LIKE_POST(postId), {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          liked: isLiked,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("응답:", data);
+        });
+
       likeCount.textContent = parseInt(likeCount.textContent) - 1;
       likeCard.classList.remove("liked");
       localStorage.removeItem(likeKey);
