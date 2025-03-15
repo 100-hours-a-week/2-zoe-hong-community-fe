@@ -2,6 +2,8 @@ import { ENDPOINT } from "/js/config.js";
 import { currentUser } from '/data/data.js';
 import { showToast } from '/js/components/toast.js';
 import { patchRequest } from "/js/utils/api.js";
+import { showErrorMessage, clearErrorMessage } from '/js/utils/util.js';
+import { validatePassword, validatePasswordCheck } from '/js/utils/userUtil.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const link = document.createElement('link');
@@ -20,18 +22,25 @@ document.addEventListener('DOMContentLoaded', () => {
       const password = passwordInput.value;
       const passwordCheck = passwordCheckInput.value;
       
-      if (!password) {
-        // 검증 코드
-        return;
+      let isValid = true;
+
+      const passwordValidation = validatePassword(password);
+      if (!passwordValidation.valid) {
+        showErrorMessage('password', passwordValidation.message);
+        isValid = false;
+      } else {
+        clearErrorMessage('password');
       }
-      if (!passwordCheck) {
-        // 검증 코드
-        return;
+
+      const passwordCheckValidation = validatePasswordCheck(password, passwordCheck);
+      if (!passwordCheckValidation.valid) {
+        showErrorMessage('password-check', passwordCheckValidation.message);
+        isValid = false;
+      } else {
+        clearErrorMessage('password-check');
       }
-      if (password !== passwordCheck) {
-        // 검증 코드
-        return;
-      }
+
+      if (!isValid) return;
       
       console.log('비밀번호 수정 요청:', { userId: currentUser.id });
 
