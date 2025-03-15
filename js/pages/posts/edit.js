@@ -1,3 +1,4 @@
+import { ROUTES } from '/js/config.js';
 import { postDetailData } from '/data/data.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -14,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!postId) {
     console.error('유효하지 않은 게시물 ID입니다.');
     alert('수정할 게시물을 찾을 수 없습니다.');
-    window.location.href = `/pages/posts/post.html?id=${postId}`;
+    window.location.href = ROUTES.POST(postId);
     return;
   }
 
@@ -22,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!post) {
     console.error(`ID ${postId}에 해당하는 게시물을 찾을 수 없습니다.`);
     alert('수정할 게시물을 찾을 수 없습니다.');
-    window.location.href = `/pages/posts/post.html?id=${postId}`;
+    window.location.href = ROUTES.POST(postId);
     return;
   }
   
@@ -67,12 +68,12 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(response => response.json())
       .then(data => {
         console.log('응답:', data);
-        window.location.href = `/pages/posts/post.html?id=${postId}`;
+        window.location.href = ROUTES.POST(postId);
       })
       .catch(error => {
         console.error('오류 발생:', error);
         // 임시
-        window.location.href = `/pages/posts/post.html?id=${postId}`;
+        window.location.href = ROUTES.POST(postId);
       })
     });
   } else {

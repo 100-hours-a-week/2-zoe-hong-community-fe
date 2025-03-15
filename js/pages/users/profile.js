@@ -1,3 +1,4 @@
+import { ROUTES } from '/js/config.js';
 import { currentUser } from "/data/data.js";
 import { showToast } from "/js/components/toast.js";
 
@@ -115,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .catch((error) => {
           console.error("오류 발생:", error);
           // 임시
-          window.location.href = "/pages/login.html";
+          window.location.href = ROUTES.LOGIN;
         });
     });
 

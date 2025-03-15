@@ -1,6 +1,8 @@
+import { ROUTES } from "/js/config.js";
+
 export function postCard(post, card) {
   card.addEventListener('click', function() {
-    window.location.href = `/pages/posts/post.html?id=${post.id}`;
+    window.location.href = ROUTES.POST(post.id);
   });
 
   card.innerHTML = `

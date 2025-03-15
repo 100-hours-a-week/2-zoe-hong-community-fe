@@ -1,3 +1,4 @@
+import { ROUTES } from '/js/config.js';
 import { postsData } from '/data/data.js';
 import { postCard } from './listCard.js';
 
@@ -7,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (createPostButton) {
     createPostButton.addEventListener('click', function() {
-      window.location.href = '/pages/posts/create.html';
+      window.location.href = ROUTES.POST_CREATE;
     });
   } else {
     console.error('게시물 작성 버튼을 찾을 수 없습니다.');

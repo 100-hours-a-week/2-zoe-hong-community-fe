@@ -1,3 +1,4 @@
+import { ROUTES } from '/js/config.js';
 import { postDetailData, currentUser } from "/data/data.js";
 import { Comments } from "/js/pages/posts/postComment.js";
 
@@ -51,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
     editButton.addEventListener("click", function (e) {
       e.stopPropagation();
       console.log(`게시물 ${postId} 수정 페이지로 이동`);
-      window.location.href = `edit.html?id=${postId}`;
+      window.location.href = ROUTES.POST_EDIT(postId);
     });
   }
   if (deleteButton) {
@@ -69,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .then((data) => {
           console.log("응답:", data);
         });
-      window.location.href = "/pages/posts/list.html";
+      window.location.href = ROUTES.POST_LIST;
     });
   }
 

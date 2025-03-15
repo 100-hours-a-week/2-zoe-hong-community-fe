@@ -1,3 +1,5 @@
+import { ROUTES } from '/js/config.js';
+
 document.addEventListener('DOMContentLoaded', () => {
   const joinForm = document.getElementById('join-form');
   const redirectToLogin = document.getElementById('redirectToLogin');
@@ -78,19 +80,19 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       console.log('회원가입 시도: ', { joinForm });
-      fetch('/api/join', {
+      fetch('/api/users', {
         method: 'POST',
         body: joinForm
       })
       .then(response => response.json())
       .then(data => {
         console.log('응답:', data);
-        window.location.href = '/pages/login.html';
+        window.location.href = ROUTES.LOGIN;
       })
       .catch(error => {
         console.error('오류 발생:', error);
         // 임시
-        window.location.href = '/pages/login.html';
+        window.location.href = ROUTES.LOGIN;
       })
     })
   } else {
@@ -99,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (redirectToLogin) {
     redirectToLogin.addEventListener('click', function(event) {
-      window.location.href = '/pages/login.html';
+      window.location.href = ROUTES.LOGIN;
     })
   } else {
     console.error('로그인 페이지로 이동하는 데 실패했습니다.');
