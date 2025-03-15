@@ -1,3 +1,6 @@
+import { ENDPOINT } from '/js/config.js';
+import { ROUTES } from '/js/config.js';
+
 document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById('login-form');
   const emailInput = document.getElementById('email');
@@ -26,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
       };
  
       console.log('로그인 시도:', { loginData });
-      fetch('/api/login', {
+      fetch(ENDPOINT.LOGIN, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -41,12 +44,12 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .then(data => {
         console.log('응답:', data);
-        window.location.href = '/pages/posts/list.html';
+        window.location.href = ROUTES.POST_LIST;
       })
       .catch(error => {
         console.error('오류 발생:', error);
         // 임시
-        window.location.href = '/pages/posts/list.html';
+        window.location.href = ROUTES.POST_LIST;
       });
     });
   } else {
@@ -56,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const redirectToJoin = document.getElementById('redirectToJoin');
   if (redirectToJoin) {
     redirectToJoin.addEventListener('click', function(event) {
-      window.location.href = '/pages/join.html';
+      window.location.href = ROUTES.JOIN;
     });
   } else {
     console.error('회원가입 페이지로 이동하는 데 실패했습니다.');

@@ -1,3 +1,5 @@
+import { ROUTES, ENDPOINT } from "/js/config.js";
+
 document.addEventListener('DOMContentLoaded', () => {
   const createPost = document.getElementById('create-post');
   const imageInput = document.getElementById('image');
@@ -34,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       console.log('게시물 생성 시도: ', { postData });
-      fetch('/api/posts', {
+      fetch(ENDPOINT.CREATE_POST, {
         method: 'POST',
         body: postData
       })
@@ -42,12 +44,12 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(data => {
         console.log('응답:', data);
         // 서버와 연결한 이후, 해당 id의 게시물 조회 페이지로 이동하도록 변경
-        window.location.href = '/pages/posts/list.html';
+        window.location.href = ROUTES.POST_LIST;
       })
       .catch(error => {
         console.error('오류 발생:', error);
         // 임시
-        window.location.href = '/pages/posts/list.html';
+        window.location.href = ROUTES.POST_LIST;
       })
     })
   } else {

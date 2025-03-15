@@ -1,3 +1,4 @@
+import { ENDPOINT } from '/js/config.js';
 import { CommentInput } from "./postCommentInput.js";
 
 export function Comments(comments, postId, currentUser) {
@@ -51,7 +52,7 @@ export function refreshComments(comments, postId, currentUser) {
       if (deleteCommentModal) {
         deleteCommentModal.openModal();
         deleteCommentModal.setOnConfirm(() => {
-          fetch(`/api/posts/${postId}/comment/${commentId}`, {
+          fetch(ENDPOINT.CREATE_COMMENT(postId, commentId), {
             method: "DELETE",
           })
             .then((response) => response.json())

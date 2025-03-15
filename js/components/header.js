@@ -1,3 +1,5 @@
+import { ROUTES } from '/js/config.js';
+
 class LogoutHeaderComponent extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
@@ -12,7 +14,7 @@ class LogoutHeaderComponent extends HTMLElement {
     `;
     
     this.querySelector('.logo').addEventListener('click', () => {
-      window.location.href = '/pages/login.html';
+      window.location.href = ROUTES.LOGIN;
     });
   }
 }
@@ -32,7 +34,7 @@ class BackLogoutHeaderComponent extends HTMLElement {
     `;
     
     this.querySelector('.logo').addEventListener('click', () => {
-      window.location.href = '/pages/login.html';
+      window.location.href = ROUTES.LOGIN;
     });
   }
 }
@@ -76,7 +78,7 @@ class LoginHeaderComponent extends HTMLElement {
     `;
 
     this.querySelector('.logo').addEventListener('click', () => {
-      window.location.href = '/pages/posts/list.html';
+      window.location.href = ROUTES.POST_LIST;
     });
 
     const profileImg = this.querySelector('.profile-img');
@@ -100,14 +102,14 @@ class LoginHeaderComponent extends HTMLElement {
     const toMypage = this.querySelector('#to-profile');
     if (toMypage) {
       toMypage.addEventListener('click', () => {
-        window.location.href = '/pages/users/profile.html';
+        window.location.href = ROUTES.USER_PROFILE;
       });
     }
     
     const toSettings = this.querySelector('#to-password');
     if (toSettings) {
       toSettings.addEventListener('click', () => {
-        window.location.href = '/pages/users/password.html';
+        window.location.href = ROUTES.USER_PASSWORD;
       });
     }
     
@@ -116,7 +118,7 @@ class LoginHeaderComponent extends HTMLElement {
       logout.addEventListener('click', () => {
         console.log('로그아웃 처리');
         localStorage.removeItem('authToken');
-        window.location.href = '/pages/login.html';
+        window.location.href = ROUTES.LOGIN;
       });
     }
   }
@@ -162,7 +164,7 @@ class BackLoginHeaderComponent extends HTMLElement {
     `;
 
     this.querySelector('.logo').addEventListener('click', () => {
-      window.location.href = '/pages/posts/list.html';
+      window.location.href = ROUTES.POST_LIST;
     });
 
     const profileImg = this.querySelector('.profile-img');
@@ -186,14 +188,14 @@ class BackLoginHeaderComponent extends HTMLElement {
     const toMypage = this.querySelector('#to-profile');
     if (toMypage) {
       toMypage.addEventListener('click', () => {
-        window.location.href = '/pages/users/profile.html';
+        window.location.href = ROUTES.USER_PROFILE;
       });
     }
     
     const toSettings = this.querySelector('#to-password');
     if (toSettings) {
       toSettings.addEventListener('click', () => {
-        window.location.href = '/pages/users/password.html';
+        window.location.href = ROUTES.USER_PASSWORD;
       });
     }
     
@@ -202,13 +204,15 @@ class BackLoginHeaderComponent extends HTMLElement {
       logout.addEventListener('click', () => {
         console.log('로그아웃 처리');
         localStorage.removeItem('authToken');
-        window.location.href = '/pages/login.html';
+        window.location.href = ROUTES.LOGIN;
       });
     }
   }
 }
 
-customElements.define("logout-header", LogoutHeaderComponent);
-customElements.define("back-logout-header", BackLogoutHeaderComponent);
-customElements.define("login-header", LoginHeaderComponent);
-customElements.define("back-login-header", BackLoginHeaderComponent);
+document.addEventListener("DOMContentLoaded", () => {
+  customElements.define("login-header", LoginHeaderComponent);
+  customElements.define("back-login-header", BackLoginHeaderComponent);
+  customElements.define("logout-header", LogoutHeaderComponent);
+  customElements.define("back-logout-header", BackLogoutHeaderComponent);
+});

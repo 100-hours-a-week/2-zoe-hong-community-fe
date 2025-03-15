@@ -1,3 +1,4 @@
+import { ROUTES, ENDPOINT } from "/js/config.js";
 import { postDetailData, currentUser } from "/data/data.js";
 import { Comments } from "/js/pages/posts/postComment.js";
 
@@ -51,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
     editButton.addEventListener("click", function (e) {
       e.stopPropagation();
       console.log(`게시물 ${postId} 수정 페이지로 이동`);
-      window.location.href = `edit.html?id=${postId}`;
+      window.location.href = ROUTES.POST_EDIT(postId);
     });
   }
   if (deleteButton) {
@@ -62,14 +63,14 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   if (deletePostModal) {
     deletePostModal.setOnConfirm(() => {
-      fetch(`/api/posts/${postId}`, {
+      fetch(ENDPOINT.GET_POST_DETAIL(postId), {
         method: "DELETE",
       })
         .then((response) => response.json())
         .then((data) => {
           console.log("응답:", data);
         });
-      window.location.href = "/pages/posts/list.html";
+      window.location.href = ROUTES.POST_LIST;
     });
   }
 
@@ -91,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
   likeCard.addEventListener("click", function () {
     isLiked = !isLiked;
 
-    fetch(`/api/posts/${postId}/like`, {
+    fetch(ENDPOINT.LIKE_POST(postId), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
