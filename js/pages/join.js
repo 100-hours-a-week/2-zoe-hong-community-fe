@@ -1,6 +1,6 @@
 import { postRequest } from '/js/utils/api.js';
 import { ROUTES, ENDPOINT } from '/js/config.js';
-import { validateEmail, validatePassword, validatePasswordCheck, validateNickname } from '/js/utils/util.js';
+import { validateEmail, validatePassword, validatePasswordCheck, validateNickname } from '/js/utils/userUtil.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const joinForm = document.getElementById('join-form');
