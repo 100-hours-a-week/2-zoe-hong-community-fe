@@ -1,6 +1,9 @@
 import { ENDPOINT } from "/js/config.js";
 import { currentUser } from '/data/data.js';
 import { showToast } from '/js/components/toast.js';
+import { patchRequest } from "/js/utils/api.js";
+import { showErrorMessage, clearErrorMessage } from '/js/utils/util.js';
+import { validatePassword, validatePasswordCheck } from '/js/utils/userUtil.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const link = document.createElement('link');
@@ -19,43 +22,35 @@ document.addEventListener('DOMContentLoaded', () => {
       const password = passwordInput.value;
       const passwordCheck = passwordCheckInput.value;
       
-      if (!password) {
-        // 검증 코드
-        return;
+      let isValid = true;
+
+      const passwordValidation = validatePassword(password);
+      if (!passwordValidation.valid) {
+        showErrorMessage('password', passwordValidation.message);
+        isValid = false;
+      } else {
+        clearErrorMessage('password');
       }
-      if (!passwordCheck) {
-        // 검증 코드
-        return;
+
+      const passwordCheckValidation = validatePasswordCheck(password, passwordCheck);
+      if (!passwordCheckValidation.valid) {
+        showErrorMessage('password-check', passwordCheckValidation.message);
+        isValid = false;
+      } else {
+        clearErrorMessage('password-check');
       }
-      if (password !== passwordCheck) {
-        // 검증 코드
-        return;
-      }
-      
-      const passwordData = {
-        password: password
-      };
+
+      if (!isValid) return;
       
       console.log('비밀번호 수정 요청:', { userId: currentUser.id });
-      
-      fetch(ENDPOINT.UPDATE_PASSWORD(currentUser.id), {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(passwordData)
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('비밀번호 수정 응답:', data);
-        showToast('수정 완료', 'success');
-        editPasswordForm.reset();
-      })
-      .catch(error => {
-        console.error('오류 발생:', error);
-        // 임시
-        showToast('수정 완료', 'success');
-      })
+
+      const response = patchRequest(ENDPOINT.UPDATE_PASSWORD, { password });
+      if (!response.success) {
+        console.error(response.message);
+        // return;
+      }
+      showToast('수정 완료', 'success');
+      editPasswordForm.reset();
     });
   }
 });

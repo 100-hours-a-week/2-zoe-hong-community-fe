@@ -1,5 +1,6 @@
 import { ENDPOINT } from '/js/config.js';
 import { CommentInput } from "./postCommentInput.js";
+import { deleteRequest } from '/js/utils/api.js';
 
 export function Comments(comments, postId, currentUser) {
   document.addEventListener("click", function (e) {
@@ -52,24 +53,11 @@ export function refreshComments(comments, postId, currentUser) {
       if (deleteCommentModal) {
         deleteCommentModal.openModal();
         deleteCommentModal.setOnConfirm(() => {
-          fetch(ENDPOINT.CREATE_COMMENT(postId, commentId), {
-            method: "DELETE",
-          })
-            .then((response) => response.json())
-            .then((data) => {
-              console.log("응답:", data);
-
-              // 댓글 배열에서 제거
-              const index = comments.findIndex((c) => c.id === commentId);
-              if (index !== -1) {
-                comments.splice(index, 1);
-              }
-
-              refreshComments(comments, postId, currentUser);
-            })
-            .catch((error) => {
-              console.error("댓글 삭제 중 오류가 발생했습니다:", error);
-            });
+          const response = deleteRequest(ENDPOINT.CREATE_COMMENT(postId, commentId));
+          if (!response.success) {
+            console.error(response.message);
+            // return;
+          }
         });
       }
     });

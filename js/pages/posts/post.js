@@ -1,6 +1,7 @@
 import { ROUTES, ENDPOINT } from "/js/config.js";
 import { postDetailData, currentUser } from "/data/data.js";
 import { Comments } from "/js/pages/posts/postComment.js";
+import { postRequest, deleteRequest } from "/js/utils/api.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   // url에서 id 값 가져오기
@@ -63,13 +64,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   if (deletePostModal) {
     deletePostModal.setOnConfirm(() => {
-      fetch(ENDPOINT.GET_POST_DETAIL(postId), {
-        method: "DELETE",
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("응답:", data);
-        });
+      const response = deleteRequest(ENDPOINT.GET_POST_DETAIL(postId));
+      if (!response.success) {
+        console.error(response.message);
+        // return;
+      }
       window.location.href = ROUTES.POST_LIST;
     });
   }
@@ -92,25 +91,23 @@ document.addEventListener("DOMContentLoaded", () => {
   likeCard.addEventListener("click", function () {
     isLiked = !isLiked;
 
-    fetch(ENDPOINT.LIKE_POST(postId), {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        liked: isLiked,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("응답:", data);
-      });
-
     if (isLiked) {
+      const response = postRequest(ENDPOINT.LIKE_POST(postId), { liked: isLiked });
+      if (!response.success) {
+        console.error(response.message);
+        // return;
+      }
+
       likeCount.textContent = parseInt(likeCount.textContent) + 1;
       likeCard.classList.add("liked");
       localStorage.setItem(likeKey, "true");
     } else {
+      const response = deleteRequest(ENDPOINT.LIKE_POST(postId));
+      if (!response.success) {
+        console.error(response.message);
+        // return;
+      }
+
       likeCount.textContent = parseInt(likeCount.textContent) - 1;
       likeCard.classList.remove("liked");
       localStorage.removeItem(likeKey);
