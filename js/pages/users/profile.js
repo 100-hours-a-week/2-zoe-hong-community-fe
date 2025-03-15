@@ -2,6 +2,8 @@ import { ROUTES, ENDPOINT } from "/js/config.js";
 import { currentUser } from "/data/data.js";
 import { showToast } from "/js/components/toast.js";
 import { patchRequest, deleteRequest } from "/js/utils/api.js";
+import { showErrorMessage, clearErrorMessage } from "/js/utils/util.js";
+import { validateNickname } from "/js/utils/userUtil.js"; 
 
 document.addEventListener("DOMContentLoaded", () => {
   const link = document.createElement("link");
@@ -71,12 +73,15 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (editProfile) {
-    editProfile.addEventListener("submit", function (event) {
+    editProfile.addEventListener("submit", async function (event) {
       event.preventDefault();
 
-      if (!nickname.value.trim()) {
-        // 검증 코드
+      const validation = await validateNickname(nickname.value);
+      if (!validation.valid) {
+        showErrorMessage('edit-profile', validation.message);
         return;
+      } else {
+        clearErrorMessage('edit-profile');
       }
 
       const profileData = new FormData();
