@@ -1,25 +1,12 @@
 import { postRequest } from '../utils/api';
 import { ROUTES, ENDPOINT } from '/js/config.js';
 import { validateEmail, validatePassword } from '/js/utils/loginUtil.js';
+import { showErrorMessage, clearErrorMessage } from '/js/utils/util.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById('login-form');
   const emailInput = document.getElementById('email');
   const passwordInput = document.getElementById('password');
-  
-  function showErrorMessage(inputId, message) {
-    const errorElement = document.getElementById(`${inputId}-error`);
-    if (errorElement) {
-      errorElement.textContent = message;
-    }
-  }
-
-  function clearErrorMessage(inputId) {
-    const errorElement = document.getElementById(`${inputId}-error`);
-    if (errorElement) {
-      errorElement.textContent = "";
-    }
-  }
 
   if (loginForm) {
     loginForm.addEventListener('submit', function(event) {

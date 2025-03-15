@@ -1,6 +1,7 @@
 import { postRequest } from '/js/utils/api.js';
 import { ROUTES, ENDPOINT } from '/js/config.js';
 import { validateEmail, validatePassword, validatePasswordCheck, validateNickname } from '/js/utils/userUtil.js';
+import { showErrorMessage, clearErrorMessage } from '/js/utils/util.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const joinForm = document.getElementById('join-form');
@@ -43,20 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('이미지 선택됨:', file.name);
     }
     });
-  }
-
-  function showErrorMessage(inputId, message) {
-    const errorElement = document.getElementById(`${inputId}-error`);
-    if (errorElement) {
-      errorElement.textContent = message;
-    }
-  }
-
-  function clearErrorMessage(inputId) {
-    const errorElement = document.getElementById(`${inputId}-error`);
-    if (errorElement) {
-      errorElement.textContent = "";
-    }
   }
 
   if (joinForm) {
