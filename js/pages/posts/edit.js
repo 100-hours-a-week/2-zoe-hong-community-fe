@@ -1,6 +1,8 @@
 import { ROUTES, ENDPOINT } from '/js/config.js';
 import { postDetailData } from '/data/data.js';
 import { patchRequest } from '/js/utils/api.js';
+import { showErrorMessage, clearErrorMessage } from '/js/utils/util.js';
+import { validatePost } from '/js/utils/postUtil.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -15,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (!postId) {
     console.error('유효하지 않은 게시물 ID입니다.');
-    alert('수정할 게시물을 찾을 수 없습니다.');
     window.location.href = ROUTES.POST(postId);
     return;
   }
@@ -23,7 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const post = postDetailData.find(post => post.id === postId);
   if (!post) {
     console.error(`ID ${postId}에 해당하는 게시물을 찾을 수 없습니다.`);
-    alert('수정할 게시물을 찾을 수 없습니다.');
     window.location.href = ROUTES.POST(postId);
     return;
   }
@@ -43,14 +43,13 @@ document.addEventListener('DOMContentLoaded', () => {
   if (editPost) {
     editPost.addEventListener('submit', function(event) {
       event.preventDefault();
-      
-      if (!title.value.trim()) {
-        // 검증 코드
+
+      const validation = validatePost(title.value, content.value);
+      if (!validation.valid) {
+        showErrorMessage('edit-post', validation.message);
         return;
-      }
-      if (!content.value.trim()) {
-        // 검증 코드
-        return;
+      } else {
+        clearErrorMessage('edit-post');
       }
       
       const postForm = new FormData();
@@ -63,11 +62,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const response = patchRequest(ENDPOINT.UPDATE_POST(postId), postForm, true);
-      window.location.href = ROUTES.POST(postId);
       if (!response.success) {
         console.error(response.message);
         // return;
       }
+      window.location.href = ROUTES.POST(postId);
     });
   } else {
     console.error('수정 폼을 찾을 수 없습니다.');
