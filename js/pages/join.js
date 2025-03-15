@@ -1,3 +1,4 @@
+import { postRequest } from '/js/utils/api.js';
 import { ROUTES, ENDPOINT } from '/js/config.js';
 import { validateEmail, validatePassword, validatePasswordCheck, validateNickname } from '/js/utils/util.js';
 
@@ -118,20 +119,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       console.log('회원가입 시도: ', { joinForm });
 
-      fetch(ENDPOINT.JOIN, {
-        method: 'POST',
-        body: joinForm
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('응답:', data);
-        window.location.href = ROUTES.LOGIN;
-      })
-      .catch(error => {
-        console.error('오류 발생:', error);
-        // 임시
-        window.location.href = ROUTES.LOGIN;
-      });
+      const response = postRequest(ENDPOINT.JOIN, joinForm, true);
+      if (!response.success) {
+        console.error(response.message);
+        // return;
+      }
+      window.location.href = ROUTES.LOGIN;
     });
   } else {
     console.error('회원가입 폼을 찾을 수 없습니다.');

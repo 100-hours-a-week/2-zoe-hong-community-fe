@@ -1,5 +1,6 @@
 import { ROUTES, ENDPOINT } from '/js/config.js';
 import { postDetailData } from '/data/data.js';
+import { patchRequest } from '/js/utils/api.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -58,23 +59,15 @@ document.addEventListener('DOMContentLoaded', () => {
       if (newImageFile) {
         postForm.append('image', newImageFile);
       } else {
-        postForm.append('image', post.image);
+        postForm.append('image', null);
       }
 
-      fetch(ENDPOINT.UPDATE_POST(postId), {
-        method: 'PATCH',
-        body: postForm
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('응답:', data);
-        window.location.href = ROUTES.POST(postId);
-      })
-      .catch(error => {
-        console.error('오류 발생:', error);
-        // 임시
-        window.location.href = ROUTES.POST(postId);
-      })
+      const response = patchRequest(ENDPOINT.UPDATE_POST(postId), postForm, true);
+      window.location.href = ROUTES.POST(postId);
+      if (!response.success) {
+        console.error(response.message);
+        // return;
+      }
     });
   } else {
     console.error('수정 폼을 찾을 수 없습니다.');

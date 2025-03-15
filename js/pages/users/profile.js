@@ -1,6 +1,7 @@
 import { ROUTES, ENDPOINT } from "/js/config.js";
 import { currentUser } from "/data/data.js";
 import { showToast } from "/js/components/toast.js";
+import { patchRequest, deleteRequest } from "/js/utils/api.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const link = document.createElement("link");
@@ -83,41 +84,27 @@ document.addEventListener("DOMContentLoaded", () => {
       if (newProfileImage) {
         profileData.append("profileImg", newProfileImage);
       } else {
-        profileData.append("profileImg", currentUser.profileImg);
+        profileData.append("profileImg", null);
       }
 
-      fetch(ENDPOINT.UPDATE_USER_INFO, {
-        method: "PATCH",
-        body: profileData,
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("응답:", data);
-          showToast("수정 완료", "success");
-        })
-        .catch((error) => {
-          console.error("오류 발생:", error);
-          // 임시
-          showToast("수정 완료", "success");
-        });
+      const response = patchRequest(ENDPOINT.UPDATE_USER_INFO, profileData, true);
+      if (!response.success) {
+        console.error(response.message);
+        // return;
+      }
+      showToast("수정 완료", "success");
     });
   }
 
   // 회원 탈퇴
   if (deleteUser && deleteModal) {
     deleteModal.setOnConfirm(() => {
-      fetch(`/api/users/${currentUser.id}`, {
-        method: "DELETE",
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log("탈퇴 응답:", data);
-        })
-        .catch((error) => {
-          console.error("오류 발생:", error);
-          // 임시
-          window.location.href = ROUTES.LOGIN;
-        });
+      const response = deleteRequest(ENDPOINT.DELETE_USER);
+      if (!response.success) {
+        console.error(response.message);
+        // return;
+      }
+      window.location.href = ROUTES.LOGIN;
     });
 
     deleteUser.addEventListener("click", function (event) {

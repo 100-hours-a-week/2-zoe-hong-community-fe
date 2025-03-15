@@ -1,3 +1,4 @@
+import { postRequest } from "/js/utils/api.js";
 import { ENDPOINT } from "/js/config.js";
 
 export function CommentInput(comments, postId, currentUser) {
@@ -33,27 +34,13 @@ export function CommentInput(comments, postId, currentUser) {
       },
     };
 
-    fetch(ENDPOINT.CREATE_COMMENT(postId), {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ content }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("등록 응답:", data);
-        
-        comments.push(newComment);
-        commentInput.value = "";
-        window.refreshComments(comments, postId, currentUser);
-      })
-      .catch(error => {
-        console.error("오류 발생:", error);
-        // 임시
-        comments.push(newComment);
-        commentInput.value = "";
-        window.refreshComments(comments, postId, currentUser);
-      });
+    const response = postRequest(ENDPOINT.CREATE_COMMENT(postId), { content });
+    if (!response.success) {
+      console.error(response.message);
+      // return;
+    }
+    comments.push(newComment);
+    commentInput.value = "";
+    window.refreshComments(comments, postId, currentUser);
   });
 }

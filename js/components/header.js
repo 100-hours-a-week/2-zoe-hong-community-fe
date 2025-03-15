@@ -1,4 +1,5 @@
-import { ROUTES } from '/js/config.js';
+import { postRequest } from '/js/utils/api.js';
+import { ROUTES, ENDPOINT } from '/js/config.js';
 
 class LogoutHeaderComponent extends HTMLElement {
   connectedCallback() {
@@ -117,6 +118,11 @@ class LoginHeaderComponent extends HTMLElement {
     if (logout) {
       logout.addEventListener('click', () => {
         console.log('로그아웃 처리');
+        const response = postRequest(ENDPOINT.LOGOUT);
+        if (!response.success) {
+          console.error(response.message);
+          // return;
+        }
         localStorage.removeItem('authToken');
         window.location.href = ROUTES.LOGIN;
       });

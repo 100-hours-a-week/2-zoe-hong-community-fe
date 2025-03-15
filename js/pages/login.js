@@ -1,3 +1,4 @@
+import { postRequest } from '../utils/api';
 import { ROUTES, ENDPOINT } from '/js/config.js';
 import { validateEmail, validatePassword } from '/js/utils/loginUtil.js';
 
@@ -53,28 +54,12 @@ document.addEventListener('DOMContentLoaded', () => {
       };
  
       console.log('로그인 시도:', { loginData });
-      fetch(ENDPOINT.LOGIN, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ loginData })
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('로그인 실패');
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log('응답:', data);
-        window.location.href = ROUTES.POST_LIST;
-      })
-      .catch(error => {
-        console.error('오류 발생:', error);
-        // 임시
-        window.location.href = ROUTES.POST_LIST;
-      });
+      const response = postRequest(ENDPOINT.LOGIN, loginData);
+      if (!response.success) {
+        console.error(response.message);
+        // return;
+      }
+      window.location.href = ROUTES.POST_LIST;
     });
   } else {
     console.error('로그인 폼을 찾을 수 없습니다.');
