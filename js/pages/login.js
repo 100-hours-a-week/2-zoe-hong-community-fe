@@ -1,27 +1,51 @@
-import { ENDPOINT } from '/js/config.js';
-import { ROUTES } from '/js/config.js';
+import { ROUTES, ENDPOINT } from '/js/config.js';
+import { validateEmail, validatePassword } from '/js/utils/loginUtil.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById('login-form');
   const emailInput = document.getElementById('email');
   const passwordInput = document.getElementById('password');
   
+  function showErrorMessage(inputId, message) {
+    const errorElement = document.getElementById(`${inputId}-error`);
+    if (errorElement) {
+      errorElement.textContent = message;
+    }
+  }
+
+  function clearErrorMessage(inputId) {
+    const errorElement = document.getElementById(`${inputId}-error`);
+    if (errorElement) {
+      errorElement.textContent = "";
+    }
+  }
+
   if (loginForm) {
     loginForm.addEventListener('submit', function(event) {
       event.preventDefault();
       
       const email = emailInput.value.trim();
       const password = passwordInput.value;
+
+      let isValid = true;
       
-      if (!email) {
-        // 검증 텍스트
-        return;
+      const emailValidation = validateEmail(email);
+      if (!emailValidation.valid) {
+        showErrorMessage('email', emailValidation.message);
+        isValid = false;
+      } else {
+        clearErrorMessage('email');
       }
       
-      if (!password) {
-        // 검증 텍스트
-        return;
+      const passwordValidation = validatePassword(password);
+      if (!passwordValidation.valid) {
+        showErrorMessage('password', passwordValidation.message);
+        isValid = false;
+      } else {
+        clearErrorMessage('password');
       }
+
+      if (!isValid) return;
  
       const loginData = {
         email: email,

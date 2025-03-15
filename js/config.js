@@ -16,6 +16,8 @@ export const ENDPOINT = {
   LOGIN: `${BE_URL}/auth/login`,
   LOGOUT: `${BE_URL}/auth/logout`,
   JOIN: `${BE_URL}/users`,
+  CHECK_EMAIL: (email) => `${BE_URL}/users/check-email?email=${email}`,
+  CHECK_NICKNAME: (nickname) => `${BE_URL}/users/check-nickname?nickname=${nickname}`,
   DELETE_USER: `${BE_URL}/users/self`,
   GET_USER_INFO: `${BE_URL}/users/self/info`,
   UPDATE_USER_INFO: `${BE_URL}/users/self/info`,
@@ -29,4 +31,3 @@ export const ENDPOINT = {
   UPDATE_COMMENT: (postId, commentId) => `${BE_URL}/posts/${postId}/comments/${commentId}`,
   DELETE_COMMENT: (postId, commentId) => `${BE_URL}/posts/${postId}/comments/${commentId}`,
 };
-

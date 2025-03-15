@@ -1,11 +1,11 @@
-import { ENDPOINT } from '/js/config.js';
-import { ROUTES } from '/js/config.js';
+import { ROUTES, ENDPOINT } from '/js/config.js';
+import { validateEmail, validatePassword, validatePasswordCheck, validateNickname } from '/js/utils/util.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const joinForm = document.getElementById('join-form');
   const redirectToLogin = document.getElementById('redirectToLogin');
   let profileImage = null;
-  
+
   const imageInput = document.querySelector('#profile-img input[type="file"]');
   if (imageInput) {
     imageInput.addEventListener('change', function(event) {
@@ -40,47 +40,84 @@ document.addEventListener('DOMContentLoaded', () => {
           profileImg.appendChild(previewImg);
         }
         console.log('이미지 선택됨:', file.name);
-      }
+    }
     });
   }
-  
+
+  function showErrorMessage(inputId, message) {
+    const errorElement = document.getElementById(`${inputId}-error`);
+    if (errorElement) {
+      errorElement.textContent = message;
+    }
+  }
+
+  function clearErrorMessage(inputId) {
+    const errorElement = document.getElementById(`${inputId}-error`);
+    if (errorElement) {
+      errorElement.textContent = "";
+    }
+  }
+
   if (joinForm) {
-    joinForm.addEventListener('submit', function(event) {
+    joinForm.addEventListener('submit', async function(event) {
       event.preventDefault();
+      
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
       const passwordCheck = document.getElementById('password-check').value;
       const nickname = document.getElementById('nickname').value;
-      if(!email) {
-        // 검증 코드
-        return;
-      }
-      if(!password) {
-        // 검증 코드
-        return;
-      }
-      if(!passwordCheck) {
-        // 검증 코드
-        return;
-      }
-      if(!nickname) {
-        // 검증 코드
-        return;
-      }
-      if(password !== passwordCheck) {
-        // 검증 코드
-        return;
-      }
+
+      let isValid = true;
       
+      if (!profileImage) {
+        showErrorMessage('profile-img', "* 프로필 사진을 추가해주세요.");
+        isValid = false;
+      } else {
+        clearErrorMessage('profile-img');
+      }
+
+      const emailValidation = await validateEmail(email);
+      if (!emailValidation.valid) {
+        showErrorMessage('email', emailValidation.message);
+        isValid = false;
+      } else {
+        clearErrorMessage('email');
+      }
+
+      const passwordValidation = validatePassword(password);
+      if (!passwordValidation.valid) {
+        showErrorMessage('password', passwordValidation.message);
+        isValid = false;
+      } else {
+        clearErrorMessage('password');
+      }
+
+      const passwordCheckValidation = validatePasswordCheck(password, passwordCheck);
+      if (!passwordCheckValidation.valid) {
+        showErrorMessage('password-check', passwordCheckValidation.message);
+        isValid = false;
+      } else {
+        clearErrorMessage('password-check');
+      }
+
+      const nicknameValidation = await validateNickname(nickname);
+      if (!nicknameValidation.valid) {
+        showErrorMessage('nickname', nicknameValidation.message);
+        isValid = false;
+      } else {
+        clearErrorMessage('nickname');
+      }
+
+      if (!isValid) return;
+
       const joinForm = new FormData();
+      joinForm.append('profileImg', profileImage);
       joinForm.append('email', email);
       joinForm.append('password', password);
       joinForm.append('nickname', nickname);
-      if (profileImage) {
-        joinForm.append('profileImg', profileImage);
-      }
 
       console.log('회원가입 시도: ', { joinForm });
+
       fetch(ENDPOINT.JOIN, {
         method: 'POST',
         body: joinForm
@@ -94,17 +131,17 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('오류 발생:', error);
         // 임시
         window.location.href = ROUTES.LOGIN;
-      })
-    })
+      });
+    });
   } else {
-    console.error('회원가입 폼을 찾을 수 없습니다.')
+    console.error('회원가입 폼을 찾을 수 없습니다.');
   }
 
   if (redirectToLogin) {
     redirectToLogin.addEventListener('click', function(event) {
       window.location.href = ROUTES.LOGIN;
-    })
+    });
   } else {
     console.error('로그인 페이지로 이동하는 데 실패했습니다.');
-  };
+  }
 });
