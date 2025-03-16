@@ -1,45 +1,45 @@
-import { ROUTES, ENDPOINT } from "/js/config.js";
-import { currentUser } from "/data/data.js";
-import { showToast } from "/js/components/toast.js";
-import { patchRequest, deleteRequest } from "/js/utils/api.js";
-import { showErrorMessage, clearErrorMessage } from "/js/utils/util.js";
-import { validateNickname } from "/js/utils/userUtil.js"; 
+import { ROUTES, ENDPOINT } from '/js/config.js';
+import { currentUser } from '/data/data.js';
+import { showToast } from '/js/components/toast.js';
+import { patchRequest, deleteRequest } from '/js/utils/api.js';
+import { showErrorMessage, clearErrorMessage } from '/js/utils/util.js';
+import { validateNickname } from '/js/utils/userUtil.js';
 
-document.addEventListener("DOMContentLoaded", () => {
-  const link = document.createElement("link");
-  link.rel = "stylesheet";
-  link.href = "/css/components/toast.css";
+document.addEventListener('DOMContentLoaded', () => {
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = '/css/components/toast.css';
   document.head.appendChild(link);
 
-  const editProfile = document.getElementById("edit-profile");
-  const profileImg = document.getElementById("profile-img");
-  const email = document.getElementById("email");
-  const nickname = document.getElementById("nickname");
-  const deleteUser = document.getElementById("delete-user");
-  const deleteModal = document.getElementById("user-delete-modal");
+  const editProfile = document.getElementById('edit-profile');
+  const profileImg = document.getElementById('profile-img');
+  const email = document.getElementById('email');
+  const nickname = document.getElementById('nickname');
+  const deleteUser = document.getElementById('delete-user');
+  const deleteModal = document.getElementById('user-delete-modal');
 
   if (currentUser) {
-    console.log("현재 사용자 정보:", currentUser);
+    console.log('현재 사용자 정보:', currentUser);
 
     if (nickname) {
-      nickname.value = currentUser.nickname || "";
+      nickname.value = currentUser.nickname || '';
     }
 
     if (email) {
-      email.textContent = currentUser.email || "";
+      email.textContent = currentUser.email || '';
     }
 
     if (profileImg && currentUser.profileImg) {
-      const imgContainer = profileImg.closest(".circle-img");
+      const imgContainer = profileImg.closest('.circle-img');
       if (imgContainer) {
-        const plusIcon = imgContainer.querySelector(".plus-icon");
+        const plusIcon = imgContainer.querySelector('.plus-icon');
         if (plusIcon) {
           plusIcon.remove();
         }
 
         imgContainer.style.backgroundImage = `url('${currentUser.profileImg}')`;
-        imgContainer.style.backgroundSize = "cover";
-        imgContainer.style.backgroundPosition = "center";
+        imgContainer.style.backgroundSize = 'cover';
+        imgContainer.style.backgroundPosition = 'center';
       }
     }
   }
@@ -47,23 +47,23 @@ document.addEventListener("DOMContentLoaded", () => {
   let newProfileImage = null;
 
   if (profileImg) {
-    profileImg.addEventListener("change", function (event) {
+    profileImg.addEventListener('change', function (event) {
       const file = event.target.files[0];
       if (file) {
         newProfileImage = file;
         const reader = new FileReader();
 
         reader.onload = function (e) {
-          const imgContainer = profileImg.closest(".circle-img");
+          const imgContainer = profileImg.closest('.circle-img');
           if (imgContainer) {
-            const plusIcon = imgContainer.querySelector(".plus-icon");
+            const plusIcon = imgContainer.querySelector('.plus-icon');
             if (plusIcon) {
               plusIcon.remove();
             }
 
             imgContainer.style.backgroundImage = `url('${e.target.result}')`;
-            imgContainer.style.backgroundSize = "cover";
-            imgContainer.style.backgroundPosition = "center";
+            imgContainer.style.backgroundSize = 'cover';
+            imgContainer.style.backgroundPosition = 'center';
           }
         };
 
@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (editProfile) {
-    editProfile.addEventListener("submit", async function (event) {
+    editProfile.addEventListener('submit', async function (event) {
       event.preventDefault();
 
       const validation = await validateNickname(nickname.value);
@@ -85,11 +85,11 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       const profileData = new FormData();
-      profileData.append("nickname", nickname.value.trim());
+      profileData.append('nickname', nickname.value.trim());
       if (newProfileImage) {
-        profileData.append("profileImg", newProfileImage);
+        profileData.append('profileImg', newProfileImage);
       } else {
-        profileData.append("profileImg", null);
+        profileData.append('profileImg', null);
       }
 
       const response = patchRequest(ENDPOINT.UPDATE_USER_INFO, profileData, true);
@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error(response.message);
         // return;
       }
-      showToast("수정 완료", "success");
+      showToast('수정 완료', 'success');
     });
   }
 
@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
       window.location.href = ROUTES.LOGIN;
     });
 
-    deleteUser.addEventListener("click", function (event) {
+    deleteUser.addEventListener('click', function (event) {
       event.preventDefault();
       deleteModal.openModal();
     });

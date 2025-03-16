@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const boxComponent = document.querySelector('.box-component-500');
 
   if (createPostButton) {
-    createPostButton.addEventListener('click', function() {
+    createPostButton.addEventListener('click', function () {
       window.location.href = ROUTES.POST_CREATE;
     });
   } else {
@@ -15,14 +15,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // 게시물 카드 불러오기
-  postsData.posts.forEach(post => {
+  postsData.posts.forEach((post) => {
     const cardList = document.createElement('div');
     const card = document.createElement('div');
 
     cardList.className = 'card-list';
     card.className = 'card hover';
     card.setAttribute('post-id', post.id);
-    
+
     postCard(post, card);
 
     cardList.appendChild(card);

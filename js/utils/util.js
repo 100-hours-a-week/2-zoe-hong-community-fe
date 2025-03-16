@@ -8,6 +8,6 @@ export function showErrorMessage(inputId, message) {
 export function clearErrorMessage(inputId) {
   const errorElement = document.getElementById(`${inputId}-error`);
   if (errorElement) {
-    errorElement.textContent = "";
+    errorElement.textContent = '';
   }
 }

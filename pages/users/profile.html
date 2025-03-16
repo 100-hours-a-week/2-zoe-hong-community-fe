@@ -8,10 +8,10 @@
     <link rel="stylesheet" href="/css/components/form.css" />
     <link rel="stylesheet" href="/css/components/img.css" />
     <style>
-        #email {
-            margin: 10px 0px;
-        }
-        </style>
+      #email {
+        margin: 10px 0px;
+      }
+    </style>
     <script type="module" src="/js/components/header.js"></script>
     <script type="module" src="/js/components/modal.js"></script>
     <script type="module" src="/js/pages/users/profile.js"></script>
@@ -34,36 +34,21 @@
                 </div>
               </div>
               <div class="input-component">
-                <label for="email" class="font12-bold"
-                  >이메일<strong>*</strong></label
-                >
+                <label for="email" class="font12-bold">이메일<strong>*</strong></label>
                 <div id="email" class="font12"></div>
               </div>
               <div class="input-component">
-                <label for="nickname" class="font12-bold"
-                  >닉네임<strong>*</strong></label
-                >
-                <input
-                  id="nickname"
-                  type="text"
-                  class="font12"
-                  placeholder="닉네임을 입력해주세요."
-                />
+                <label for="nickname" class="font12-bold">닉네임<strong>*</strong></label>
+                <input id="nickname" type="text" class="font12" placeholder="닉네임을 입력해주세요." />
                 <div id="edit-profile-error" class="error-message"></div>
               </div>
             </div>
             <button type="submit" class="font12-bold">수정하기</button>
           </form>
-          <div id="delete-user" class="link-component center column font12">
-            회원 탈퇴
-          </div>
+          <div id="delete-user" class="link-component center column font12">회원 탈퇴</div>
         </div>
       </div>
-      <custom-modal
-        id="user-delete-modal"
-        header="회원탈퇴 하시겠습니까?"
-        body="작성된 게시글와 댓글은 삭제됩니다."
-      >
+      <custom-modal id="user-delete-modal" header="회원탈퇴 하시겠습니까?" body="작성된 게시글와 댓글은 삭제됩니다.">
       </custom-modal>
     </div>
   </body>

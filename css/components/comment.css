@@ -60,7 +60,8 @@
   user-select: none;
 }
 
-.comment-edit-btn, .comment-delete-btn {
+.comment-edit-btn,
+.comment-delete-btn {
   width: 35px;
   border: 1px solid var(--gray);
   border-radius: 7px;

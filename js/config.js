@@ -1,5 +1,5 @@
-const FE_URL = ""; // 프론트엔드 도메인
-const BE_URL = ""; // 백엔드 도메인
+const FE_URL = ''; // 프론트엔드 도메인
+const BE_URL = ''; // 백엔드 도메인
 
 export const ROUTES = {
   LOGIN: `${FE_URL}/pages/login.html`,

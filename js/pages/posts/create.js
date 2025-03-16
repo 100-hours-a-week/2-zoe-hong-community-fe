@@ -1,21 +1,21 @@
-import { validatePost } from "/js/utils/postUtil.js";
-import { ROUTES, ENDPOINT } from "/js/config.js";
-import { postRequest } from "/js/utils/api.js";
+import { validatePost } from '/js/utils/postUtil.js';
+import { ROUTES, ENDPOINT } from '/js/config.js';
+import { postRequest } from '/js/utils/api.js';
 import { showErrorMessage, clearErrorMessage } from '/js/utils/util.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const createPost = document.getElementById('create-post');
   const imageInput = document.getElementById('image');
-  
+
   let image = null;
 
   if (imageInput) {
-    imageInput.addEventListener('change', function(event) {
+    imageInput.addEventListener('change', function (event) {
       image = event.target.files[0];
-    })
+    });
   }
   if (createPost) {
-    createPost.addEventListener('submit', function(event) {
+    createPost.addEventListener('submit', function (event) {
       event.preventDefault();
       const title = document.getElementById('title').value;
       const content = document.getElementById('content').value;
@@ -44,8 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // return;
       }
       window.location.href = ROUTES.POST_LIST;
-    })
+    });
   } else {
-    console.error('회원가입 폼을 찾을 수 없습니다.')
+    console.error('회원가입 폼을 찾을 수 없습니다.');
   }
-})
+});

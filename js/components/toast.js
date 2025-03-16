@@ -1,16 +1,16 @@
-const animationDuraion = 10;
+const animationDuration = 10;
 const removeDuration = 300;
 
-export function showToast(message, type = "info", duration = 2000) {
-  let toastContainer = document.querySelector(".toast-container");
+export function showToast(message, type = 'info', duration = 2000) {
+  let toastContainer = document.querySelector('.toast-container');
 
   if (!toastContainer) {
-    toastContainer = document.createElement("div");
-    toastContainer.className = "toast-container";
+    toastContainer = document.createElement('div');
+    toastContainer.className = 'toast-container';
     document.body.appendChild(toastContainer);
   }
 
-  const toast = document.createElement("div");
+  const toast = document.createElement('div');
   toast.className = `toast-message ${type}`;
   toast.textContent = message;
 
@@ -18,12 +18,12 @@ export function showToast(message, type = "info", duration = 2000) {
 
   // 애니메이션을 위한 지연
   setTimeout(() => {
-    toast.classList.add("show");
-  }, animationDuraion);
+    toast.classList.add('show');
+  }, animationDuration);
 
   // 지정된 시간 후 제거
   setTimeout(() => {
-    toast.classList.remove("show");
+    toast.classList.remove('show');
 
     setTimeout(() => {
       toastContainer.removeChild(toast);
