@@ -27,6 +27,7 @@ export const ENDPOINT = {
   GET_POST_DETAIL: (postId) => `${BE_URL}/posts/${postId}`,
   UPDATE_POST: (postId) => `${BE_URL}/posts/${postId}`,
   LIKE_POST: (postId) => `${BE_URL}/posts/${postId}/like`,
+  GET_COMMENTS: (postId) => `${BE_URL}/posts/${postId}/comments`,
   CREATE_COMMENT: (postId) => `${BE_URL}/posts/${postId}/comments`,
   UPDATE_COMMENT: (postId, commentId) => `${BE_URL}/posts/${postId}/comments/${commentId}`,
   DELETE_COMMENT: (postId, commentId) => `${BE_URL}/posts/${postId}/comments/${commentId}`,
