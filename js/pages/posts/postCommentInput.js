@@ -1,46 +1,50 @@
-import { postRequest } from '/js/utils/api.js';
+import { postRequest, putRequest } from '/js/utils/api.js';
+import { validateComment } from '/js/utils/commentUtil.js';
 import { ENDPOINT } from '/js/config.js';
 
-export function CommentInput(comments, postId, currentUser) {
-  const commentForm = document.getElementById('comment-card');
-  const commentInput = commentForm ? commentForm.querySelector('.comment-input-field') : null;
-  const submitButton = commentForm ? commentForm.querySelector('.color-button') : null;
+export function CommentInput(postId, comment = null) {
+  const commentForm = document.querySelector('#comment-card');
+  commentForm.innerHTML = `
+  <div class="comment-input-content">
+  <textarea id="comment-input-textarea" type="text" placeholder="댓글을 남겨주세요!" class="comment-input-textarea">${
+    comment ? comment.content : ''
+  }</textarea>
+  </div>
+  <hr class="hr-line" />
+  <div class="comment-button right-align-container">
+  <button id="comment-submit-btn" class="color-button">${comment ? `수정하기` : `댓글 등록`}</button>
+  </div>
+  `;
 
-  if (!commentForm || !commentInput || !submitButton) {
-    console.error('댓글 입력 폼을 찾을 수 없습니다.');
-    return;
-  }
+  CommentAPIHandler(postId, comment);
+}
 
-  commentForm.addEventListener('submit', function (e) {
+function CommentAPIHandler(postId, comment) {
+  const commentInput = document.querySelector('#comment-input-textarea');
+  const commentButton = document.querySelector('#comment-submit-btn');
+  commentButton.addEventListener('click', async function (e) {
     e.preventDefault();
 
     const content = commentInput.value.trim();
-    if (!content) {
-      // 검증 코드
+
+    const validation = validateComment(content);
+    if (!validation.valid) {
+      console.error(validation.message);
       return;
     }
 
-    // 새 댓글
-    const now = new Date();
-    const formattedDate = now.toISOString().replace('T', ' ').substring(0, 19);
-
-    const newComment = {
-      id: comments.length > 0 ? Math.max(...comments.map((c) => c.id)) + 1 : 1,
-      content: content,
-      createdAt: formattedDate,
-      user: {
-        nickname: currentUser.nickname,
-        profileImg: currentUser.profileImg,
-      },
-    };
-
-    const response = postRequest(ENDPOINT.CREATE_COMMENT(postId), { content });
-    if (!response.success) {
+    // comment ? 댓글 추가 : 댓글 수정
+    try {
+      const response = !comment
+        ? await postRequest(ENDPOINT.CREATE_COMMENT(postId), { content })
+        : await putRequest(ENDPOINT.UPDATE_COMMENT(postId, comment.id), { content });
+      if (!response.success) {
+        console.error(response.message);
+        // return;
+      }
+      CommentInput(postId);
+    } catch (error) {
       console.error(response.message);
-      // return;
     }
-    comments.push(newComment);
-    commentInput.value = '';
-    window.refreshComments(comments, postId, currentUser);
   });
 }
