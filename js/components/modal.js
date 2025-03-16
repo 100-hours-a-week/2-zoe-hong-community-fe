@@ -1,17 +1,21 @@
-class ModalComponent extends HTMLElement {
+class ModalUIHandler extends HTMLElement {
   constructor() {
     super();
-    this.closeModal = this.closeModal.bind(this);
-    this.handleOutsideClick = this.handleOutsideClick.bind(this);
-    this.handleEscKey = this.handleEscKey.bind(this);
   }
 
   connectedCallback() {
-    const header = this.getAttribute('header');
-    const body = this.getAttribute('body');
+    this.render();
+  }
+
+  render() {
+    const header = this.getAttribute('header') || "알림";
+    const body = this.getAttribute('body') || "내용";
+    const cancelText = this.getAttribute("cancel-text") || "취소";
+    const confirmText = this.getAttribute("confirm-text") || "확인";
+
     this.innerHTML = `
       <style>
-      @import "/css/components/modal.css";
+        @import "/css/components/modal.css";
       </style>
       
       <div class="modal">
@@ -23,30 +27,39 @@ class ModalComponent extends HTMLElement {
             <p class="sub-text">${body}</p>
           </div>
           <div class="modal-footer">
-            <button class="btn-cancel">취소</button>
-            <button class="btn-danger">삭제</button>
+            <button class="btn-cancel">${cancelText}</button>
+            <button class="btn-danger">${confirmText}</button>
           </div>
         </div>
       </div>
     `;
+  }
+}
+customElements.define('modal-ui', ModalUIHandler);
 
-    this.modal = this.querySelector('.modal');
-    this.cancelBtn = this.querySelector('.btn-cancel');
-    this.confirmBtn = this.querySelector('.btn-danger');
+class ModalEventHandler {
+  constructor(modalElement) {
+    this.modal = modalElement.querySelector('.modal');
+    this.cancelBtn = modalElement.querySelector('.btn-cancel');
+    this.confirmBtn = modalElement.querySelector('.btn-danger');
 
-    if (this.hasAttribute('cancel-text')) {
-      this.cancelBtn.textContent = this.getAttribute('cancel-text');
-    }    
-    if (this.hasAttribute('confirm-text')) {
-      this.confirmBtn.textContent = this.getAttribute('confirm-text');
+    this.closeModal = this.closeModal.bind(this);
+    this.handleOutsideClick = this.handleOutsideClick.bind(this);
+    this.handleEscKey = this.handleEscKey.bind(this);
+  }
+
+  init() {
+    if (!this.modal || !this.cancelBtn || !this.confirmBtn) {
+      console.error("모달 초기화에 오류가 발생하였습니다.");
+      return;
     }
 
     this.cancelBtn.addEventListener('click', this.closeModal);
     window.addEventListener('click', this.handleOutsideClick);
     document.addEventListener('keydown', this.handleEscKey);
   }
-  
-  disconnectedCallback() {
+
+  destroy() {
     this.cancelBtn.removeEventListener('click', this.closeModal);
     window.removeEventListener('click', this.handleOutsideClick);
     document.removeEventListener('keydown', this.handleEscKey);
@@ -79,6 +92,43 @@ class ModalComponent extends HTMLElement {
       callback();
       this.closeModal();
     });
+  }
+}
+
+class ModalComponent extends HTMLElement {
+  constructor() {
+    super();
+    this.ModalEventHandler = null;
+  }
+
+  connectedCallback() {
+    this.render();
+    this.modalEventHandler = new ModalEventHandler(this);
+    this.modalEventHandler.init();
+  }
+
+  disconnectedCallback() {
+    this.modalEventHandler?.destroy();
+  }
+
+  render() {
+    const modalUI = document.createElement("modal-ui");
+    Array.from(this.attributes).forEach(attr => {
+      modalUI.setAttribute(attr.name, attr.value);
+    });
+    this.appendChild(modalUI);
+  }
+
+  openModal() {
+    this.modalEventHandler?.openModal();
+  }
+
+  closeModal() {
+    this.modalEventHandler?.closeModal();
+  }
+
+  setOnConfirm(callback) {
+    this.modalEventHandler?.setOnConfirm(callback);
   }
 }
 customElements.define('custom-modal', ModalComponent);
