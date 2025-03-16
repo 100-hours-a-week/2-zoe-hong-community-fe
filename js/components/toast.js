@@ -1,5 +1,5 @@
-const animationDutaion = 10;
-const deleteDuration = 300;
+const animationDuraion = 10;
+const removeDuration = 300;
 
 export function showToast(message, type = "info", duration = 2000) {
   let toastContainer = document.querySelector(".toast-container");
@@ -19,7 +19,7 @@ export function showToast(message, type = "info", duration = 2000) {
   // 애니메이션을 위한 지연
   setTimeout(() => {
     toast.classList.add("show");
-  }, animationDutaion);
+  }, animationDuraion);
 
   // 지정된 시간 후 제거
   setTimeout(() => {
@@ -31,6 +31,6 @@ export function showToast(message, type = "info", duration = 2000) {
       if (toastContainer.children.length === 0) {
         document.body.removeChild(toastContainer);
       }
-    }, deleteDuration);
+    }, removeDuration);
   }, duration);
 }
