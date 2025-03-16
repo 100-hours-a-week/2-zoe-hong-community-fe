@@ -45,7 +45,7 @@ class LoginHeaderComponent extends HTMLElement {
   
   renderHeader(user) {
     const hasBackButton = this.hasAttribute("back");
-    const userProfileImg = user.profileImg || null;
+    const userProfileImg = user.profileImg;
 
     this.innerHTML = `
     <style>
