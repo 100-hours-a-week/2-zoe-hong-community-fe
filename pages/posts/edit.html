@@ -1,45 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/main.css"/>
-    <link rel="stylesheet" href="/css/reset.css"/>
-    <link rel="stylesheet" href="/css/components/form.css"/>
-    <link rel="stylesheet" href="/css/components/post.css"/>
-    <link rel="stylesheet" href="create.css"/>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/reset.css" />
+    <link rel="stylesheet" href="/css/components/form.css" />
+    <link rel="stylesheet" href="/css/components/post.css" />
+    <link rel="stylesheet" href="create.css" />
     <script type="module" src="/js/components/header.js"></script>
     <script type="module" src="/js/pages/posts/edit.js"></script>
     <title>2-KTB Community Project</title>
-</head>
-<body>
+  </head>
+  <body>
     <login-header back></login-header>
     <div class="wrap center column">
-        <div class="container center column">
-            <div id="nav" class="font16-bold">게시글 수정</div>
-            <form id="edit-post" class="box-component-500 column">
-                <div class="post-create-box">
-                    <nav for="title">제목<strong>*</strong></nav>
-                    <div class="post-create-title">
-                        <input id="title" placeholder="제목을 입력해주세요. (최대 26글자)"/>
-                    </div>
-                </div>
-                <div class="post-create-box">
-                    <nav for="content">내용<strong>*</strong></nav>
-                    <div class="post-create-content">
-                        <textarea id="content" placeholder="내용을 입력해주세요."></textarea>
-                    </div>
-                </div>
-                <div id="edit-post-error" class="error-message"></div>
-                <div class="post-create-box">
-                    <nav for="image">이미지</nav>
-                    <input id="image" type="file"/>
-                </div>
-                <div class="button-container">
-                    <button class="color-button">수정하기</button>
-                </div>
-            </form>
-        </div>
+      <div class="container center column">
+        <div id="nav" class="font16-bold">게시글 수정</div>
+        <form id="edit-post" class="box-component-500 column">
+          <div class="post-create-box">
+            <nav for="title">제목<strong>*</strong></nav>
+            <div class="post-create-title">
+              <input id="title" placeholder="제목을 입력해주세요. (최대 26글자)" />
+            </div>
+          </div>
+          <div class="post-create-box">
+            <nav for="content">내용<strong>*</strong></nav>
+            <div class="post-create-content">
+              <textarea id="content" placeholder="내용을 입력해주세요."></textarea>
+            </div>
+          </div>
+          <div id="edit-post-error" class="error-message"></div>
+          <div class="post-create-box">
+            <nav for="image">이미지</nav>
+            <input id="image" type="file" />
+          </div>
+          <div class="button-container">
+            <button class="color-button">수정하기</button>
+          </div>
+        </form>
+      </div>
     </div>
-</body>
+  </body>
 </html>

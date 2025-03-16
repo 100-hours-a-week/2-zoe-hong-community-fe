@@ -7,7 +7,7 @@ import { validatePost } from '/js/utils/postUtil.js';
 document.addEventListener('DOMContentLoaded', () => {
   const urlParams = new URLSearchParams(window.location.search);
   const postId = parseInt(urlParams.get('id'));
-  
+
   const title = document.getElementById('title');
   const content = document.getElementById('content');
   const imageFile = document.getElementById('image');
@@ -21,27 +21,27 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  const post = postDetailData.find(post => post.id === postId);
+  const post = postDetailData.find((post) => post.id === postId);
   if (!post) {
     console.error(`ID ${postId}에 해당하는 게시물을 찾을 수 없습니다.`);
     window.location.href = ROUTES.POST(postId);
     return;
   }
-  
+
   if (title) title.value = post.title;
   if (content) content.value = post.content;
 
   let newImageFile = null;
   if (imageFile) {
-    imageFile.addEventListener('change', function(event) {
+    imageFile.addEventListener('change', function (event) {
       if (event.target.files && event.target.files[0]) {
         newImageFile = event.target.files[0];
       }
-    })
+    });
   }
-  
+
   if (editPost) {
-    editPost.addEventListener('submit', function(event) {
+    editPost.addEventListener('submit', function (event) {
       event.preventDefault();
 
       const validation = validatePost(title.value, content.value);
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         clearErrorMessage('edit-post');
       }
-      
+
       const postForm = new FormData();
       postForm.append('title', title.value.trim());
       postForm.append('content', content.value.trim());

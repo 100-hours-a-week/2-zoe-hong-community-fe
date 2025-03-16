@@ -3,20 +3,20 @@ import { ROUTES, ENDPOINT } from '/js/config.js';
 
 class LogoutHeaderComponent extends HTMLElement {
   connectedCallback() {
-    const hasBackButton = this.hasAttribute("back");
+    const hasBackButton = this.hasAttribute('back');
 
     this.innerHTML = `
     <style>
       @import "/css/components/header.css";
     </style>
     <header class="header">
-      ${hasBackButton ? `<div class="back-button">&lt;</div>` : ""}
+      ${hasBackButton ? `<div class="back-button">&lt;</div>` : ''}
       <div class="logo font24 black" style="cursor:pointer">
         <div>아무 말 대잔치</div>
       </div>
     </header>
     `;
-    
+
     this.querySelector('.logo').addEventListener('click', () => {
       window.location.href = ROUTES.LOGIN;
     });
@@ -24,27 +24,26 @@ class LogoutHeaderComponent extends HTMLElement {
     if (hasBackButton) {
       this.querySelector('.back-button').addEventListener('click', () => {
         window.location.href = ROUTES.LOGIN;
-      })
+      });
     }
   }
 }
 
 class LoginHeaderComponent extends HTMLElement {
   connectedCallback() {
-    
     import('/data/data.js')
-    .then(module => {
-      const { currentUser } = module;
-      this.renderHeader(currentUser);
-    })
-    .catch(error => {
-      console.error('데이터 로드 실패:', error);
-      this.renderHeader({ profileImg: '/assets/user-profile.jpg' });
-    });
+      .then((module) => {
+        const { currentUser } = module;
+        this.renderHeader(currentUser);
+      })
+      .catch((error) => {
+        console.error('데이터 로드 실패:', error);
+        this.renderHeader({ profileImg: '/assets/user-profile.jpg' });
+      });
   }
-  
+
   renderHeader(user) {
-    const hasBackButton = this.hasAttribute("back");
+    const hasBackButton = this.hasAttribute('back');
     const userProfileImg = user.profileImg;
 
     this.innerHTML = `
@@ -52,7 +51,7 @@ class LoginHeaderComponent extends HTMLElement {
       @import "/css/components/header.css";
     </style>
     <header class="header">
-      ${hasBackButton ? `<div class="back-button">&lt;</div>` : ""}
+      ${hasBackButton ? `<div class="back-button">&lt;</div>` : ''}
       <div class="logo font24 black" style="cursor:pointer">
         <div>아무 말 대잔치</div>
       </div>
@@ -77,41 +76,41 @@ class LoginHeaderComponent extends HTMLElement {
     if (hasBackButton) {
       this.querySelector('.back-button').addEventListener('click', () => {
         window.location.href = ROUTES.POST_LIST;
-      })
+      });
     }
 
     const profileImg = this.querySelector('.profile-img');
     const dropdownMenu = this.querySelector('.dropdown-menu');
-    
+
     if (profileImg && dropdownMenu) {
       profileImg.addEventListener('click', (e) => {
         e.stopPropagation();
         dropdownMenu.classList.toggle('active');
       });
-      
+
       document.addEventListener('click', () => {
         dropdownMenu.classList.remove('active');
       });
-      
+
       dropdownMenu.addEventListener('click', (e) => {
         e.stopPropagation();
       });
     }
-    
+
     const toMypage = this.querySelector('#to-profile');
     if (toMypage) {
       toMypage.addEventListener('click', () => {
         window.location.href = ROUTES.USER_PROFILE;
       });
     }
-    
+
     const toSettings = this.querySelector('#to-password');
     if (toSettings) {
       toSettings.addEventListener('click', () => {
         window.location.href = ROUTES.USER_PASSWORD;
       });
     }
-    
+
     const logout = this.querySelector('#logout');
     if (logout) {
       logout.addEventListener('click', () => {
@@ -128,7 +127,7 @@ class LoginHeaderComponent extends HTMLElement {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  customElements.define("login-header", LoginHeaderComponent);
-  customElements.define("logout-header", LogoutHeaderComponent);
+document.addEventListener('DOMContentLoaded', () => {
+  customElements.define('login-header', LoginHeaderComponent);
+  customElements.define('logout-header', LogoutHeaderComponent);
 });

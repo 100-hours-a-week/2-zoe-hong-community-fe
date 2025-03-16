@@ -1,14 +1,14 @@
-import { ROUTES, ENDPOINT } from "/js/config.js";
-import { postDetailData, currentUser } from "/data/data.js";
-import { Comments } from "/js/pages/posts/postComment.js";
-import { postRequest, deleteRequest } from "/js/utils/api.js";
+import { ROUTES, ENDPOINT } from '/js/config.js';
+import { postDetailData, currentUser } from '/data/data.js';
+import { Comments } from '/js/pages/posts/postComment.js';
+import { postRequest, deleteRequest } from '/js/utils/api.js';
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
   // url에서 id 값 가져오기
   const urlParams = new URLSearchParams(window.location.search);
-  const postId = parseInt(urlParams.get("id"));
+  const postId = parseInt(urlParams.get('id'));
   if (!postId) {
-    console.error("유효하지 않은 게시물 ID입니다.");
+    console.error('유효하지 않은 게시물 ID입니다.');
     return;
   }
 
@@ -20,44 +20,44 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // 제목
-  console.log("찾은 게시물:", post);
-  document.getElementById("title").textContent = post.title;
-  document.getElementById("username").textContent = post.user.nickname;
-  document.getElementById("date").textContent = post.createdAt;
+  console.log('찾은 게시물:', post);
+  document.getElementById('title').textContent = post.title;
+  document.getElementById('username').textContent = post.user.nickname;
+  document.getElementById('date').textContent = post.createdAt;
 
-  const profileImgElement = document.getElementById("profile-img");
+  const profileImgElement = document.getElementById('profile-img');
   if (profileImgElement && post.user.profileImg) {
     profileImgElement.style.backgroundImage = `url('${post.user.profileImg}')`;
-    profileImgElement.style.backgroundSize = "cover";
+    profileImgElement.style.backgroundSize = 'cover';
   }
 
   // 내용
-  document.getElementById("content-text").innerHTML = post.content.replace(/\n/g, "<br/>");
-  const contentImgElement = document.getElementById("content-img");
+  document.getElementById('content-text').innerHTML = post.content.replace(/\n/g, '<br/>');
+  const contentImgElement = document.getElementById('content-img');
   if (post.image) {
-    const img = document.createElement("img");
+    const img = document.createElement('img');
     img.src = post.image;
     img.alt = post.title;
-    img.className = "post-image";
+    img.className = 'post-image';
     contentImgElement.appendChild(img);
   } else {
-    contentImgElement.style.display = "none";
+    contentImgElement.style.display = 'none';
   }
 
   // 게시물 수정/삭제 버튼
-  const editButton = document.getElementById("post-edit-button");
-  const deleteButton = document.getElementById("post-delete-button");
-  const deletePostModal = document.getElementById("post-delete-modal");
+  const editButton = document.getElementById('post-edit-button');
+  const deleteButton = document.getElementById('post-delete-button');
+  const deletePostModal = document.getElementById('post-delete-modal');
 
   if (editButton) {
-    editButton.addEventListener("click", function (e) {
+    editButton.addEventListener('click', function (e) {
       e.stopPropagation();
       console.log(`게시물 ${postId} 수정 페이지로 이동`);
       window.location.href = ROUTES.POST_EDIT(postId);
     });
   }
   if (deleteButton) {
-    deleteButton.addEventListener("click", function (e) {
+    deleteButton.addEventListener('click', function (e) {
       e.preventDefault();
       deletePostModal.openModal();
     });
@@ -78,29 +78,31 @@ document.addEventListener("DOMContentLoaded", () => {
   Comments(comments, postId, currentUser);
 
   // 메타데이터 카드
-  const likeCount = document.getElementById("like-count");
-  const viewCount = document.getElementById("view-count");
+  const likeCount = document.getElementById('like-count');
+  const viewCount = document.getElementById('view-count');
   likeCount.textContent = post.likeCount;
   viewCount.textContent = post.viewCount;
 
   // 좋아요 처리
   let isLiked = false;
   const likeCard = likeCount.parentElement;
-  likeCard.style.cursor = "pointer";
+  likeCard.style.cursor = 'pointer';
 
-  likeCard.addEventListener("click", function () {
+  likeCard.addEventListener('click', function () {
     isLiked = !isLiked;
 
     if (isLiked) {
-      const response = postRequest(ENDPOINT.LIKE_POST(postId), { liked: isLiked });
+      const response = postRequest(ENDPOINT.LIKE_POST(postId), {
+        liked: isLiked,
+      });
       if (!response.success) {
         console.error(response.message);
         // return;
       }
 
       likeCount.textContent = parseInt(likeCount.textContent) + 1;
-      likeCard.classList.add("liked");
-      localStorage.setItem(likeKey, "true");
+      likeCard.classList.add('liked');
+      localStorage.setItem(likeKey, 'true');
     } else {
       const response = deleteRequest(ENDPOINT.LIKE_POST(postId));
       if (!response.success) {
@@ -109,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       likeCount.textContent = parseInt(likeCount.textContent) - 1;
-      likeCard.classList.remove("liked");
+      likeCard.classList.remove('liked');
       localStorage.removeItem(likeKey);
     }
   });

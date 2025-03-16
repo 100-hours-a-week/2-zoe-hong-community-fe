@@ -1,7 +1,7 @@
-import { ROUTES } from "/js/config.js";
+import { ROUTES } from '/js/config.js';
 
 export function postCard(post, card) {
-  card.addEventListener('click', function() {
+  card.addEventListener('click', function () {
     window.location.href = ROUTES.POST(post.id);
   });
 
@@ -24,9 +24,11 @@ export function postCard(post, card) {
     <hr class="hr-line"/>
     <div class="content">
       <div class="user">
-        <div class="circle-img"${post.user.profileImg
-          ? `style="background-image: url('${post.user.profileImg}'); background-size: cover;"`
-          : ''}
+        <div class="circle-img"${
+          post.user.profileImg
+            ? `style="background-image: url('${post.user.profileImg}'); background-size: cover;"`
+            : ''
+        }
         >
         </div>
         <div class="user-name">${post.user.nickname}</div>

@@ -8,10 +8,10 @@ class ModalUIHandler extends HTMLElement {
   }
 
   render() {
-    const header = this.getAttribute('header') || "알림";
-    const body = this.getAttribute('body') || "내용";
-    const cancelText = this.getAttribute("cancel-text") || "취소";
-    const confirmText = this.getAttribute("confirm-text") || "확인";
+    const header = this.getAttribute('header') || '알림';
+    const body = this.getAttribute('body') || '내용';
+    const cancelText = this.getAttribute('cancel-text') || '취소';
+    const confirmText = this.getAttribute('confirm-text') || '확인';
 
     this.innerHTML = `
       <style>
@@ -50,7 +50,7 @@ class ModalEventHandler {
 
   init() {
     if (!this.modal || !this.cancelBtn || !this.confirmBtn) {
-      console.error("모달 초기화에 오류가 발생하였습니다.");
+      console.error('모달 초기화에 오류가 발생하였습니다.');
       return;
     }
 
@@ -86,7 +86,7 @@ class ModalEventHandler {
       this.closeModal();
     }
   }
-  
+
   setOnConfirm(callback) {
     this.confirmBtn.addEventListener('click', () => {
       callback();
@@ -112,8 +112,8 @@ class ModalComponent extends HTMLElement {
   }
 
   render() {
-    const modalUI = document.createElement("modal-ui");
-    Array.from(this.attributes).forEach(attr => {
+    const modalUI = document.createElement('modal-ui');
+    Array.from(this.attributes).forEach((attr) => {
       modalUI.setAttribute(attr.name, attr.value);
     });
     this.appendChild(modalUI);

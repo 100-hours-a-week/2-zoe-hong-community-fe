@@ -6,59 +6,59 @@ export async function getRequest(url) {
     }
     return await response.json();
   } catch (error) {
-    console.error("GET 요청 오류:", error);
-    return { success: false, message: "네트워크 오류가 발생했습니다." };
+    console.error('GET 요청 오류:', error);
+    return { success: false, message: '네트워크 오류가 발생했습니다.' };
   }
 }
 
 export async function postRequest(url, data, isFormData = false) {
   try {
     const response = await fetch(url, {
-      method: "POST",
-      headers: isFormData ? {} : { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: isFormData ? {} : { 'Content-Type': 'application/json' },
       body: isFormData ? data : JSON.stringify(data),
     });
     return await response.json();
   } catch (error) {
-    console.error("POST 요청 오류:", error);
-    return { success: false, message: "네트워크 오류가 발생했습니다." };
+    console.error('POST 요청 오류:', error);
+    return { success: false, message: '네트워크 오류가 발생했습니다.' };
   }
 }
 
 export async function putRequest(url, data, isFormData = false) {
   try {
     const response = await fetch(url, {
-      method: "PUT",
-      headers: isFormData ? {} : { "Content-Type": "application/json" },
+      method: 'PUT',
+      headers: isFormData ? {} : { 'Content-Type': 'application/json' },
       body: isFormData ? data : JSON.stringify(data),
     });
     return await response.json();
   } catch (error) {
-    console.error("PUT 요청 오류:", error);
-    return { success: false, message: "네트워크 오류가 발생했습니다." };
+    console.error('PUT 요청 오류:', error);
+    return { success: false, message: '네트워크 오류가 발생했습니다.' };
   }
 }
 
 export async function patchRequest(url, data, isFormData = false) {
   try {
     const response = await fetch(url, {
-      method: "PATCH",
-      headers: isFormData ? {} : { "Content-Type": "application/json" },
+      method: 'PATCH',
+      headers: isFormData ? {} : { 'Content-Type': 'application/json' },
       body: isFormData ? data : JSON.stringify(data),
     });
     return await response.json();
   } catch (error) {
-    console.error("PATCH 요청 오류:", error);
-    return { success: false, message: "네트워크 오류가 발생했습니다." };
+    console.error('PATCH 요청 오류:', error);
+    return { success: false, message: '네트워크 오류가 발생했습니다.' };
   }
 }
 
 export async function deleteRequest(url) {
   try {
-    const response = await fetch(url, { method: "DELETE" });
+    const response = await fetch(url, { method: 'DELETE' });
     return await response.json();
   } catch (error) {
-    console.error("DELETE 요청 오류:", error);
-    return { success: false, message: "네트워크 오류가 발생했습니다." };
+    console.error('DELETE 요청 오류:', error);
+    return { success: false, message: '네트워크 오류가 발생했습니다.' };
   }
 }

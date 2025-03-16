@@ -1,12 +1,12 @@
 import { ENDPOINT } from '/js/config.js';
-import { CommentInput } from "./postCommentInput.js";
+import { CommentInput } from './postCommentInput.js';
 import { deleteRequest } from '/js/utils/api.js';
 
 export function Comments(comments, postId, currentUser) {
-  document.addEventListener("click", function (e) {
-    if (!e.target.closest(".comment")) {
-      document.querySelectorAll(".comment-actions").forEach((div) => {
-        div.style.display = "none";
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.comment')) {
+      document.querySelectorAll('.comment-actions').forEach((div) => {
+        div.style.display = 'none';
       });
     }
   });
@@ -17,11 +17,11 @@ export function Comments(comments, postId, currentUser) {
 
 export function refreshComments(comments, postId, currentUser) {
   console.log(comments);
-  const commentListElement = document.getElementById("comment-list");
-  const commentCountElement = document.getElementById("comment-count");
-  const deleteCommentModal = document.getElementById("comment-delete-modal");
+  const commentListElement = document.getElementById('comment-list');
+  const commentCountElement = document.getElementById('comment-count');
+  const deleteCommentModal = document.getElementById('comment-delete-modal');
 
-  commentListElement.innerHTML = "";
+  commentListElement.innerHTML = '';
 
   // 댓글 불러오기
   comments
@@ -32,12 +32,12 @@ export function refreshComments(comments, postId, currentUser) {
       const commentElement = createCommentElement(comment, isCurrentUser);
       commentListElement.appendChild(commentElement);
 
-      const deleteButton = commentElement.querySelector(".comment-delete-btn");
+      const deleteButton = commentElement.querySelector('.comment-delete-btn');
       if (deleteButton && isCurrentUser) {
         setupDeleteButton(deleteButton, commentElement, comment.id);
       }
 
-      const editButton = commentElement.querySelector(".comment-edit-btn");
+      const editButton = commentElement.querySelector('.comment-edit-btn');
       if (editButton && isCurrentUser) {
         setupEditButton(editButton, commentElement, comment);
       }
@@ -46,7 +46,7 @@ export function refreshComments(comments, postId, currentUser) {
   commentCountElement.textContent = comments.length;
 
   function setupDeleteButton(button, commentElement, commentId) {
-    button.addEventListener("click", function (e) {
+    button.addEventListener('click', function (e) {
       e.stopPropagation();
       e.preventDefault();
 
@@ -65,7 +65,7 @@ export function refreshComments(comments, postId, currentUser) {
 
   // 수정 버튼 설정 함수
   function setupEditButton(button, commentElement, comment) {
-    button.addEventListener("click", function (e) {
+    button.addEventListener('click', function (e) {
       e.stopPropagation();
 
       comment.content = newContent;
@@ -75,8 +75,8 @@ export function refreshComments(comments, postId, currentUser) {
 }
 
 function createCommentElement(comment, isCurrentUser) {
-  const commentElement = document.createElement("div");
-  commentElement.className = "comment";
+  const commentElement = document.createElement('div');
+  commentElement.className = 'comment';
   commentElement.dataset.commentId = comment.id;
 
   const actionButtons = isCurrentUser
@@ -86,7 +86,7 @@ function createCommentElement(comment, isCurrentUser) {
       <button class="comment-delete-btn small-button">삭제</button>
     </div>
   `
-    : "";
+    : '';
 
   commentElement.innerHTML = `
     <div class="comment-box">
@@ -96,7 +96,7 @@ function createCommentElement(comment, isCurrentUser) {
             <div class="circle-img" ${
               comment.user.profileImg
                 ? `style="background-image: url('${comment.user.profileImg}'); background-size: cover;"`
-                : ""
+                : ''
             }></div>
             <div id="username">${comment.user.nickname}</div>
           </div>
@@ -113,20 +113,19 @@ function createCommentElement(comment, isCurrentUser) {
   `;
 
   if (isCurrentUser) {
-    commentElement.addEventListener("click", function (e) {
-      if (commentElement.querySelector(".comment-edit-form")) return;
+    commentElement.addEventListener('click', function (e) {
+      if (commentElement.querySelector('.comment-edit-form')) return;
 
-      const actionsDiv = commentElement.querySelector(".comment-actions");
-      const allActionDivs = document.querySelectorAll(".comment-actions");
+      const actionsDiv = commentElement.querySelector('.comment-actions');
+      const allActionDivs = document.querySelectorAll('.comment-actions');
 
       allActionDivs.forEach((div) => {
         if (div !== actionsDiv) {
-          div.style.display = "none";
+          div.style.display = 'none';
         }
       });
 
-      actionsDiv.style.display =
-        actionsDiv.style.display === "none" ? "flex" : "none";
+      actionsDiv.style.display = actionsDiv.style.display === 'none' ? 'flex' : 'none';
     });
   }
 

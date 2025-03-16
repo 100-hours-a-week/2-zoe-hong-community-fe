@@ -9,14 +9,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const passwordInput = document.getElementById('password');
 
   if (loginForm) {
-    loginForm.addEventListener('submit', function(event) {
+    loginForm.addEventListener('submit', function (event) {
       event.preventDefault();
-      
+
       const email = emailInput.value.trim();
       const password = passwordInput.value;
 
       let isValid = true;
-      
+
       const emailValidation = validateEmail(email);
       if (!emailValidation.valid) {
         showErrorMessage('email', emailValidation.message);
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         clearErrorMessage('email');
       }
-      
+
       const passwordValidation = validatePassword(password);
       if (!passwordValidation.valid) {
         showErrorMessage('password', passwordValidation.message);
@@ -34,12 +34,12 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       if (!isValid) return;
- 
+
       const loginData = {
         email: email,
-        password: password
+        password: password,
       };
- 
+
       console.log('로그인 시도:', { loginData });
       const response = postRequest(ENDPOINT.LOGIN, loginData);
       if (!response.success) {
@@ -51,10 +51,10 @@ document.addEventListener('DOMContentLoaded', () => {
   } else {
     console.error('로그인 폼을 찾을 수 없습니다.');
   }
- 
+
   const redirectToJoin = document.getElementById('redirectToJoin');
   if (redirectToJoin) {
-    redirectToJoin.addEventListener('click', function(event) {
+    redirectToJoin.addEventListener('click', function (event) {
       window.location.href = ROUTES.JOIN;
     });
   } else {
