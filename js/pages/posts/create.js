@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   if (createPost) {
-    createPost.addEventListener('submit', function (event) {
+    createPost.addEventListener('submit', async function (event) {
       event.preventDefault();
       const title = document.getElementById('title').value;
       const content = document.getElementById('content').value;
@@ -33,17 +33,12 @@ document.addEventListener('DOMContentLoaded', () => {
       postData.append('content', content);
       if (image) {
         postData.append('image', image);
-      } else {
-        postData.append('image', null);
       }
 
       console.log('게시물 생성 시도: ', { postData });
-      const response = postRequest(ENDPOINT.CREATE_POST, postData, true);
-      if (!response.success) {
-        console.error(response.message);
-        // return;
-      }
-      window.location.href = ROUTES.POST_LIST;
+      const response = await postRequest(ENDPOINT.POSTS, postData, true);
+      console.log(response);
+      // window.location.href = ROUTES.POST_LIST;
     });
   } else {
     console.error('회원가입 폼을 찾을 수 없습니다.');
