@@ -1,6 +1,9 @@
 export async function getRequest(url) {
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      method: 'GET',
+      credentials: 'include'
+    });
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
@@ -15,6 +18,7 @@ export async function postRequest(url, data, isFormData = false) {
   try {
     const response = await fetch(url, {
       method: 'POST',
+      credentials: 'include',
       headers: isFormData ? {} : { 'Content-Type': 'application/json' },
       body: isFormData ? data : JSON.stringify(data),
     });
@@ -29,6 +33,7 @@ export async function putRequest(url, data, isFormData = false) {
   try {
     const response = await fetch(url, {
       method: 'PUT',
+      credentials: 'include',
       headers: isFormData ? {} : { 'Content-Type': 'application/json' },
       body: isFormData ? data : JSON.stringify(data),
     });
@@ -43,6 +48,7 @@ export async function patchRequest(url, data, isFormData = false) {
   try {
     const response = await fetch(url, {
       method: 'PATCH',
+      credentials: 'include',
       headers: isFormData ? {} : { 'Content-Type': 'application/json' },
       body: isFormData ? data : JSON.stringify(data),
     });
@@ -55,7 +61,10 @@ export async function patchRequest(url, data, isFormData = false) {
 
 export async function deleteRequest(url) {
   try {
-    const response = await fetch(url, { method: 'DELETE' });
+    const response = await fetch(url, {
+      method: 'DELETE',
+      credentials: 'include'
+    });
     return await response.json();
   } catch (error) {
     console.error('DELETE 요청 오류:', error);
