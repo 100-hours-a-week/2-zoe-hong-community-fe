@@ -3,8 +3,8 @@ import { formatDateTime } from '/js/utils/dateUtil.js';
 
 export function postCard(post, card) {
 
-  const profileImgUrl = post.createdBy.profileImgUrl
-    ? `${BE_URL}${post.createdBy.profileImgUrl}` : '';
+  const profileImgUrl = post.user.profileImgUrl
+    ? `${BE_URL}${post.user.profileImgUrl}` : '';
 
   card.addEventListener('click', function () {
     window.location.href = ROUTES.POST(post.id);
@@ -36,7 +36,7 @@ export function postCard(post, card) {
         }
         >
         </div>
-        <div class="user-name">${post.createdBy.nickname}</div>
+        <div class="user-name">${post.user.nickname}</div>
       </div>
     </div>
   `;
