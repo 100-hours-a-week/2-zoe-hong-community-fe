@@ -5,8 +5,7 @@
   margin: 0px;
   padding: 0px;
 }
-body,
-html {
+body, html {
   font-family: Pretendard Variable, Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue',
     'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji', 'Segoe UI Emoji',
     'Segoe UI Symbol', sans-serif !important;
@@ -16,8 +15,10 @@ html {
   min-height: 100vh;
   user-select: none;
 }
-ul,
-ol {
+textarea {
+  font-family: inherit;
+}
+ul, ol {
   list-style: none;
 }
 a {
