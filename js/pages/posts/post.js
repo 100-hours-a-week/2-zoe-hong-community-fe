@@ -1,42 +1,52 @@
-import { ROUTES, ENDPOINT } from '/js/config.js';
-import { postDetailData, currentUser } from '/data/data.js';
-import { Comments } from '/js/pages/posts/postComment.js';
-import { postRequest, deleteRequest } from '/js/utils/api.js';
+import { BE_URL, ROUTES, ENDPOINT } from '/js/config.js';
+import { getRequest, postRequest, deleteRequest } from '/js/utils/api.js';
+import { formatDateTime } from '/js/utils/dateUtil.js';
+import { getPostIdFromURL } from '/js/utils/urlUtil.js';
 
-document.addEventListener('DOMContentLoaded', () => {
-  // url에서 id 값 가져오기
-  const urlParams = new URLSearchParams(window.location.search);
-  const postId = parseInt(urlParams.get('id'));
-  if (!postId) {
-    console.error('유효하지 않은 게시물 ID입니다.');
-    return;
+document.addEventListener('DOMContentLoaded', async () => {
+  const postId = Number(getPostIdFromURL());
+  if (!postId) return;
+
+  const post = await loadPostDetail(postId);
+  if (!post) return;
+
+  renderPost(post);
+  setupPostActions(postId, post);
+
+  const wasLiked = await loadLiked(postId);
+  if (wasLiked === null) return;
+  setupLike(postId, wasLiked);
+});
+
+async function loadPostDetail(postId) {
+  try {
+    const response = await getRequest(ENDPOINT.POST_DETAIL(postId));
+    if (!response.success) throw new Error(response.message);
+    return response.post;
+  } catch (err) {
+    console.error('게시글 조회 중 오류:', err);
+    return null;
   }
+}
 
-  // 게시물 데이터 가져오기
-  const post = postDetailData.find((post) => post.id === postId);
-  if (!post) {
-    console.error(`ID ${postId}에 해당하는 게시물을 찾을 수 없습니다.`);
-    return;
-  }
-
-  // 제목
-  console.log('찾은 게시물:', post);
+function renderPost(post) {
   document.getElementById('title').textContent = post.title;
   document.getElementById('username').textContent = post.user.nickname;
-  document.getElementById('date').textContent = post.createdAt;
+  document.getElementById('date').textContent = formatDateTime(post.createdAt);
 
   const profileImgElement = document.getElementById('profile-img');
-  if (profileImgElement && post.user.profileImg) {
-    profileImgElement.style.backgroundImage = `url('${post.user.profileImg}')`;
+  const profileImgUrl = `${BE_URL}${post.user.profileImgUrl}`;
+  if (profileImgElement && post.user.profileImgUrl) {
+    profileImgElement.style.backgroundImage = `url(${profileImgUrl})`;
     profileImgElement.style.backgroundSize = 'cover';
   }
 
-  // 내용
   document.getElementById('content-text').innerHTML = post.content.replace(/\n/g, '<br/>');
+
   const contentImgElement = document.getElementById('content-img');
-  if (post.image) {
+  if (post.imageUrl) {
     const img = document.createElement('img');
-    img.src = post.image;
+    img.src = `${BE_URL}${post.imageUrl}`;
     img.alt = post.title;
     img.className = 'post-image';
     contentImgElement.appendChild(img);
@@ -44,75 +54,80 @@ document.addEventListener('DOMContentLoaded', () => {
     contentImgElement.style.display = 'none';
   }
 
-  // 게시물 수정/삭제 버튼
+  document.getElementById('like-count').textContent = post.likeCount;
+  document.getElementById('view-count').textContent = post.viewCount;
+  document.getElementById('comment-count').textContent = post.commentCount;
+}
+
+function setupPostActions(postId, post) {
+  const userId = Number(sessionStorage.getItem('userId'));
+  const isCreatedBy = post.user.id === userId;
+
   const editButton = document.getElementById('post-edit-button');
   const deleteButton = document.getElementById('post-delete-button');
   const deletePostModal = document.getElementById('post-delete-modal');
 
-  if (editButton) {
-    editButton.addEventListener('click', function (e) {
-      e.stopPropagation();
-      console.log(`게시물 ${postId} 수정 페이지로 이동`);
+  if (isCreatedBy) {
+    editButton?.addEventListener('click', () => {
       window.location.href = ROUTES.POST_EDIT(postId);
     });
-  }
-  if (deleteButton) {
-    deleteButton.addEventListener('click', function (e) {
+
+    deleteButton?.addEventListener('click', (e) => {
       e.preventDefault();
-      deletePostModal.openModal();
+      deletePostModal?.openModal();
     });
-  }
-  if (deletePostModal) {
-    deletePostModal.setOnConfirm(() => {
-      const response = deleteRequest(ENDPOINT.GET_POST_DETAIL(postId));
-      if (!response.success) {
-        console.error(response.message);
-        // return;
+
+    deletePostModal?.setOnConfirm(async () => {
+      try {
+        const response = await deleteRequest(ENDPOINT.POST_DETAIL(postId));
+        if (!response.success) throw new Error(response.message);
+        window.location.href = ROUTES.POST_LIST;
+      } catch (err) {
+        console.error("게시글 삭제 중 오류:", err);
       }
-      window.location.href = ROUTES.POST_LIST;
     });
+  } else {
+    if (editButton) editButton.style.display = 'none';
+    if (deleteButton) deleteButton.style.display = 'none';
   }
+}
 
-  // 댓글
-  const comments = post.comments || [];
-  Comments(comments, postId, currentUser);
+async function loadLiked(postId) {
+  try {
+    const response = await getRequest(ENDPOINT.LIKE_POST(postId));
+    if (!response.success) throw new Error(response.message);
+    return response.liked;
+  } catch (err) {
+    console.error("좋아요 확인 중 오류:", err);
+    return null;
+  }
+}
 
-  // 메타데이터 카드
+function setupLike(postId, wasLiked) {
   const likeCount = document.getElementById('like-count');
-  const viewCount = document.getElementById('view-count');
-  likeCount.textContent = post.likeCount;
-  viewCount.textContent = post.viewCount;
-
-  // 좋아요 처리
-  let isLiked = false;
   const likeCard = likeCount.parentElement;
+
   likeCard.style.cursor = 'pointer';
+  if (wasLiked) likeCard.classList.add('liked');
 
-  likeCard.addEventListener('click', function () {
-    isLiked = !isLiked;
-
-    if (isLiked) {
-      const response = postRequest(ENDPOINT.LIKE_POST(postId), {
-        liked: isLiked,
+  likeCard.addEventListener('click', async () => {
+    try {
+      const response = await postRequest(ENDPOINT.LIKE_POST(postId), {
+        liked: !wasLiked
       });
-      if (!response.success) {
-        console.error(response.message);
-        // return;
+
+      if (!response.success) throw new Error(response.message);
+
+      likeCount.textContent = response.likes;
+
+      if (wasLiked) {
+        likeCard.classList.remove('liked');
+      } else {
+        likeCard.classList.add('liked');
       }
 
-      likeCount.textContent = parseInt(likeCount.textContent) + 1;
-      likeCard.classList.add('liked');
-      localStorage.setItem(likeKey, 'true');
-    } else {
-      const response = deleteRequest(ENDPOINT.LIKE_POST(postId));
-      if (!response.success) {
-        console.error(response.message);
-        // return;
-      }
-
-      likeCount.textContent = parseInt(likeCount.textContent) - 1;
-      likeCard.classList.remove('liked');
-      localStorage.removeItem(likeKey);
+    } catch (err) {
+      console.error("좋아요 처리 중 오류:", err);
     }
   });
-});
+}

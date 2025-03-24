@@ -1,9 +1,14 @@
-import { ENDPOINT } from '/js/config.js';
-import { deleteRequest } from '/js/utils/api.js';
-import { CommentInput } from './postCommentInput.js';
+import { BE_URL, ENDPOINT } from '/js/config.js';
+import { getRequest, deleteRequest } from '/js/utils/api.js';
+import { CommentInput } from './commentInput.js';
+import { formatDateTime } from '/js/utils/dateUtil.js';
+import { getPostIdFromURL } from '/js/utils/urlUtil.js';
 
-export function Comments(/*임시 데이터*/ comments, postId, currentUser) {
-  document.addEventListener('click', function (e) {
+document.addEventListener('DOMContentLoaded', async () => {
+  const postId = Number(getPostIdFromURL());
+  if (!postId) return;
+
+  document.addEventListener('click', async function (e) {
     if (!e.target.closest('.comment')) {
       document.querySelectorAll('.comment-actions').forEach((div) => {
         div.style.display = 'none';
@@ -11,42 +16,45 @@ export function Comments(/*임시 데이터*/ comments, postId, currentUser) {
     }
   });
 
-  CommentInput(postId);
-  refreshComments(postId, currentUser, comments);
-}
+  CommentInput(postId, null, () => {
+    CommentInput(postId); // 댓글 입력창 초기화
+    refreshComments(postId); // 댓글 목록 로딩
+  });
+  refreshComments(postId);
+});
 
-async function refreshComments(postId, currentUser, comments) {
+async function refreshComments(postId) {
   try {
-    // const response = await fetch(ENDPOINT.GET_COMMENTS(postId));
-    // const comments = await response.json();
-    // if (!response.ok) {
-    //   console.error("최신 댓글 목록 불러오기 실패");
-    //   return;
-    // }
-
+    const response = await getRequest(ENDPOINT.COMMENTS(postId));
+    if (!response.success) {
+      throw new Error(response.message);
+    }
+    
+    const comments = response.comments;
     const commentListElement = document.getElementById('comment-list');
     const commentCountElement = document.getElementById('comment-count');
     const deleteCommentModal = document.getElementById('comment-delete-modal');
 
     commentListElement.innerHTML = '';
-
+    
     // 댓글 불러오기
+    const userId = Number(sessionStorage.getItem('userId'));
     comments
       .slice()
       .sort((a, b) => b.id - a.id) // ID 내림차순 정렬
       .forEach((comment) => {
-        const isCurrentUser = comment.user.nickname === currentUser.nickname;
+        const isCurrentUser = comment.user.id === userId;
         const commentElement = createCommentElement(comment, isCurrentUser);
         commentListElement.appendChild(commentElement);
 
         const deleteButton = commentElement.querySelector('#comment-delete-btn');
         if (deleteButton && isCurrentUser) {
-          setupDeleteButton(deleteButton, deleteCommentModal, postId, comment.id, currentUser, comments);
+          setupDeleteButton(deleteButton, deleteCommentModal, postId, comment.id);
         }
 
         const editButton = commentElement.querySelector('#comment-edit-btn');
         if (editButton && isCurrentUser) {
-          setupEditButton(editButton, postId, comment, currentUser, comments);
+          setupEditButton(editButton, postId, comment);
         }
       });
 
@@ -70,20 +78,22 @@ function createCommentElement(comment, isCurrentUser) {
   `
     : '';
 
+  const profileImgUrl = `${BE_URL}${comment.user.profileImgUrl}`;
+
   commentElement.innerHTML = `
     <div class="comment-box">
       <div class="comment">
         <div class="comment-title">
           <div class="comment-user">
             <div class="circle-img" ${
-              comment.user.profileImg
-                ? `style="background-image: url('${comment.user.profileImg}'); background-size: cover;"`
+              comment.user.profileImgUrl
+                ? `style="background-image: url('${profileImgUrl}'); background-size: cover;"`
                 : ''
             }></div>
             <div id="username">${comment.user.nickname}</div>
           </div>
           <div class="comment-meta">
-            <div id="date">${comment.createdAt}</div>
+            <div id="date">${formatDateTime(comment.createdAt)}</div>
             </div>
         </div>
         <div class="comment-content">
@@ -115,8 +125,8 @@ function createCommentElement(comment, isCurrentUser) {
 }
 
 // 삭제 버튼 설정 함수
-async function setupDeleteButton(button, deleteCommentModal, postId, commentId, currentUser, comments) {
-  button.addEventListener('click', function (e) {
+async function setupDeleteButton(button, deleteCommentModal, postId, commentId) {
+  button.addEventListener('click', async function (e) {
     e.stopPropagation();
     e.preventDefault();
 
@@ -124,15 +134,13 @@ async function setupDeleteButton(button, deleteCommentModal, postId, commentId, 
       deleteCommentModal.openModal();
       deleteCommentModal.setOnConfirm(async () => {
         try {
-          const response = await deleteRequest(ENDPOINT.DELETE_COMMENT(postId, commentId));
+          const response = await deleteRequest(ENDPOINT.COMMENT_DETAIL(postId, commentId));
           if (!response.success) {
-            console.error(response.message);
-            // return;
+            throw new Error(response.message);
           }
-
-          refreshComments(postId, currentUser, comments);
-        } catch (error) {
-          console.error(response.message);
+          refreshComments(postId);
+        } catch (err) {
+          console.error("댓글 삭제 중 오류:", err);
         }
       });
     }
@@ -140,14 +148,16 @@ async function setupDeleteButton(button, deleteCommentModal, postId, commentId, 
 }
 
 // 수정 버튼 설정 함수
-async function setupEditButton(button, postId, comment, currentUser, comments) {
-  button.addEventListener('click', function (e) {
+async function setupEditButton(button, postId, comment) {
+  button.addEventListener('click', async function (e) {
     e.stopPropagation();
     try {
-      CommentInput(postId, comment);
-      refreshComments(postId, currentUser, comments);
-    } catch (error) {
-      console.error(error);
+      CommentInput(postId, comment, () => {
+        CommentInput(postId); // 댓글 입력창 초기화
+        refreshComments(postId); // 댓글 목록 로딩
+      });
+    } catch (err) {
+      console.error("댓글 수정 조회 중 오류:", err);
     }
   });
 }
