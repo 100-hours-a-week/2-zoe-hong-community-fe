@@ -1,5 +1,5 @@
-const FE_URL = 'http://localhost:5500'; // 프론트엔드 도메인
-export const BE_URL = 'http://localhost:8080'; // 백엔드 도메인
+const FE_URL = 'http://127.0.0.1:5500'; // 프론트엔드 도메인
+export const BE_URL = 'http://127.0.0.1:8080'; // 백엔드 도메인
 
 export const ROUTES = {
   LOGIN: `${FE_URL}/pages/login.html`,
