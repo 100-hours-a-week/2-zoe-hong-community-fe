@@ -12,12 +12,16 @@ document.addEventListener('DOMContentLoaded', async () => {
       window.location.href = ROUTES.POST_CREATE;
     });
   } else {
-    console.error('게시물 작성 버튼을 찾을 수 없습니다.');
+    console.error('게시글 작성 버튼을 찾을 수 없습니다.');
   }
 
-  // 게시물 카드 불러오기
+  // 게시글 카드 불러오기
   try {
     const response = await getRequest(ENDPOINT.POSTS);
+    if (!response.success) {
+      throw new Error(response.message);
+    }
+
     (response.posts ?? []).forEach((post) => {
       const cardList = document.createElement('div');
       const card = document.createElement('div');
@@ -32,6 +36,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       boxComponent.appendChild(cardList);
     });
   } catch (err) {
-    console.error(err);
+    console.error("게시글 카드 불러오기 중 오류:", err);
   }
 });

@@ -1,11 +1,10 @@
-import { ROUTES, ENDPOINT } from '/js/config.js';
-import { currentUser } from '/data/data.js';
+import { BE_URL, ROUTES, ENDPOINT } from '/js/config.js';
 import { showToast } from '/js/components/toast.js';
-import { patchRequest, deleteRequest } from '/js/utils/api.js';
+import { getRequest, patchRequest, deleteRequest } from '/js/utils/api.js';
 import { showErrorMessage, clearErrorMessage } from '/js/utils/util.js';
 import { validateNickname } from '/js/utils/userUtil.js';
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const link = document.createElement('link');
   link.rel = 'stylesheet';
   link.href = '/css/components/toast.css';
@@ -18,18 +17,28 @@ document.addEventListener('DOMContentLoaded', () => {
   const deleteUser = document.getElementById('delete-user');
   const deleteModal = document.getElementById('user-delete-modal');
 
-  if (currentUser) {
-    console.log('현재 사용자 정보:', currentUser);
+  try {
+    const response = await getRequest(ENDPOINT.UPDATE_PROFILE);
+    if (!response.success) {
+      throw new Error(response.message);
+    }
+  } catch (err) {
+    console.error("프로필 조회 중 오류:", err);
+  }
+
+  const user = response.user;
+  if (user) {
+    console.log('현재 사용자 정보:', user);
 
     if (nickname) {
-      nickname.value = currentUser.nickname || '';
+      nickname.value = user.nickname || '';
     }
 
     if (email) {
-      email.textContent = currentUser.email || '';
+      email.textContent = user.email || '';
     }
 
-    if (profileImg && currentUser.profileImg) {
+    if (profileImg && user.profileImg) {
       const imgContainer = profileImg.closest('.circle-img');
       if (imgContainer) {
         const plusIcon = imgContainer.querySelector('.plus-icon');
@@ -37,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
           plusIcon.remove();
         }
 
-        imgContainer.style.backgroundImage = `url('${currentUser.profileImg}')`;
+        imgContainer.style.backgroundImage = `url(${BE_URL}${user.profileImg})`;
         imgContainer.style.backgroundSize = 'cover';
         imgContainer.style.backgroundPosition = 'center';
       }
@@ -89,15 +98,19 @@ document.addEventListener('DOMContentLoaded', () => {
       if (newProfileImage) {
         profileData.append('profileImg', newProfileImage);
       } else {
-        profileData.append('profileImg', null);
+        profileData.append('profileImg', user.profileImg);
       }
 
-      const response = patchRequest(ENDPOINT.UPDATE_USER_INFO, profileData, true);
-      if (!response.success) {
-        console.error(response.message);
-        // return;
+      try {
+        const response = patchRequest(ENDPOINT.UPDATE_PROFILE, profileData, true);
+        if (!response.success) {
+          throw new Error(response.message);
+        }
+        showToast('수정 완료', 'success');
+      } catch (err) {
+        console.error("프로필 수정 중 오류:", err);
+        showToast('수정 실패', 'fail');
       }
-      showToast('수정 완료', 'success');
     });
   }
 
@@ -107,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const response = deleteRequest(ENDPOINT.DELETE_USER);
       if (!response.success) {
         console.error(response.message);
-        // return;
+        return;
       }
       window.location.href = ROUTES.LOGIN;
     });

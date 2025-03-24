@@ -106,9 +106,15 @@ document.addEventListener('DOMContentLoaded', () => {
       formData.append('nickname', nickname);
 
       console.log('회원가입 시도: ', { formData });
-      const response = await postRequest(ENDPOINT.USERS, formData, true);
-      console.log(response);
-      window.location.href = ROUTES.LOGIN;
+      try {
+        const response = await postRequest(ENDPOINT.USERS, formData, true);
+        if (!response.success) {
+          throw new Error(response.message);
+        }
+        window.location.href = ROUTES.LOGIN;
+      } catch (err) {
+        console.error("회원가입 처리 중 오류:", err);
+      }
     });
   } else {
     console.error('회원가입 폼을 찾을 수 없습니다.');

@@ -35,10 +35,16 @@ document.addEventListener('DOMContentLoaded', () => {
         postData.append('image', image);
       }
 
-      console.log('게시물 생성 시도: ', { postData });
-      const response = await postRequest(ENDPOINT.POSTS, postData, true);
-      console.log(response);
-      // window.location.href = ROUTES.POST_LIST;
+      console.log('게시글 생성 시도: ', { postData });
+      try {
+        const response = await postRequest(ENDPOINT.POSTS, postData, true);
+        if (!response.success) {
+          throw new Error(response.message);
+        }
+        window.location.href = ROUTES.POST_LIST;
+      } catch (err) {
+        console.error("게시글 생성 중 오류:", err);
+      }
     });
   } else {
     console.error('회원가입 폼을 찾을 수 없습니다.');

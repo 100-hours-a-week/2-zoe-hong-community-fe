@@ -43,10 +43,13 @@ document.addEventListener('DOMContentLoaded', () => {
   
         console.log('로그인 시도:', { loginData });
         const response = await postRequest(ENDPOINT.LOGIN, loginData);
-        console.log(response);
+        if (!response.success) {
+          throw new Error(response.message);
+        }
+        sessionStorage.setItem('userId', response.id);
         window.location.href = ROUTES.POST_LIST;
       } catch (err) {
-        console.error("좋아요 처리 중 오류:", err);
+        console.error("로그인 처리 중 오류:", err);
       }
     });
   } else {

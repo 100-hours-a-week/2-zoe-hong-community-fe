@@ -1,5 +1,4 @@
 import { ENDPOINT } from '/js/config.js';
-import { currentUser } from '/data/data.js';
 import { showToast } from '/js/components/toast.js';
 import { patchRequest } from '/js/utils/api.js';
 import { showErrorMessage, clearErrorMessage } from '/js/utils/util.js';
@@ -16,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const passwordCheckInput = document.getElementById('password-check');
 
   if (editPasswordForm) {
-    editPasswordForm.addEventListener('submit', function (event) {
+    editPasswordForm.addEventListener('submit', async function (event) {
       event.preventDefault();
 
       const password = passwordInput.value;
@@ -42,15 +41,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (!isValid) return;
 
-      console.log('비밀번호 수정 요청:', { userId: currentUser.id });
-
-      const response = patchRequest(ENDPOINT.UPDATE_PASSWORD, { password });
-      if (!response.success) {
-        console.error(response.message);
-        // return;
+      try {
+        const response = await patchRequest(ENDPOINT.UPDATE_PASSWORD, { password });
+        if (!response.success) {
+          throw new Error(response.message);
+        }
+        showToast('수정 완료', 'success');
+        editPasswordForm.reset();
+      } catch (err) {
+        console.error("비밀번호 수정 중 오류:", err);
       }
-      showToast('수정 완료', 'success');
-      editPasswordForm.reset();
     });
   }
 });
