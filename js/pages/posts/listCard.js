@@ -1,6 +1,11 @@
-import { ROUTES } from '/js/config.js';
+import { BE_URL, ROUTES } from '/js/config.js';
+import { formatDateTime } from '/js/utils/dateUtil.js';
 
 export function postCard(post, card) {
+
+  const profileImgUrl = post.user.profileImgUrl
+    ? `${BE_URL}${post.user.profileImgUrl}` : '';
+
   card.addEventListener('click', function () {
     window.location.href = ROUTES.POST(post.id);
   });
@@ -17,7 +22,7 @@ export function postCard(post, card) {
           <span>조회수 ${post.viewCount}</span>
         </div>
         <div>
-          ${post.createdAt}
+          ${formatDateTime(post.createdAt)}
         </div>
       </div>
     </div>
@@ -25,8 +30,8 @@ export function postCard(post, card) {
     <div class="content">
       <div class="user">
         <div class="circle-img"${
-          post.user.profileImg
-            ? `style="background-image: url('${post.user.profileImg}'); background-size: cover;"`
+          profileImgUrl
+            ? `style="background-image: url('${profileImgUrl}'); background-size: cover;"`
             : ''
         }
         >

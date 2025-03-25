@@ -119,6 +119,7 @@
 .post-content {
   display: flex;
   flex-direction: column;
+  min-height: 80px;
   gap: 15px;
   font-size: 12px;
   line-height: 150%;
@@ -128,6 +129,10 @@
   height: auto;
   background-color: var(--gray);
   display: flex;
+}
+.post-content img {
+  max-width: 100%;
+  display: block;
 }
 .post-metadata {
   width: 100%;

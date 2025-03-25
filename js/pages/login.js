@@ -1,4 +1,4 @@
-import { ROUTES, ENDPOINT } from '/js/config.js';
+import { BE_URL, ROUTES, ENDPOINT } from '/js/config.js';
 import { postRequest } from '/js/utils/api.js';
 import { validateEmail, validatePassword } from '/js/utils/loginUtil.js';
 import { showErrorMessage, clearErrorMessage } from '/js/utils/util.js';
@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const passwordInput = document.getElementById('password');
 
   if (loginForm) {
-    loginForm.addEventListener('submit', function (event) {
+    loginForm.addEventListener('submit', async function (event) {
       event.preventDefault();
 
       const email = emailInput.value.trim();
@@ -35,18 +35,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (!isValid) return;
 
-      const loginData = {
-        email: email,
-        password: password,
-      };
-
-      console.log('로그인 시도:', { loginData });
-      const response = postRequest(ENDPOINT.LOGIN, loginData);
-      if (!response.success) {
-        console.error(response.message);
-        // return;
+      try {
+        const loginData = {
+          email: email,
+          password: password,
+        };
+  
+        console.log('로그인 시도:', { loginData });
+        const response = await postRequest(ENDPOINT.LOGIN, loginData);
+        if (!response.success) {
+          throw new Error(response.message);
+        }
+        
+        localStorage.setItem('userId', response.user.id);
+        const profileImgUrl = `${BE_URL}${response.user.profileImgUrl}`;
+        localStorage.setItem('userImg', profileImgUrl);
+        window.location.href = ROUTES.POST_LIST;
+      } catch (err) {
+        console.error("로그인 처리 중 오류:", err);
       }
-      window.location.href = ROUTES.POST_LIST;
     });
   } else {
     console.error('로그인 폼을 찾을 수 없습니다.');

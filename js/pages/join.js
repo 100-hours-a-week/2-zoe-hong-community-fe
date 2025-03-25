@@ -6,9 +6,9 @@ import { showErrorMessage, clearErrorMessage } from '/js/utils/util.js';
 document.addEventListener('DOMContentLoaded', () => {
   const joinForm = document.getElementById('join-form');
   const redirectToLogin = document.getElementById('redirectToLogin');
+  const imageInput = document.querySelector('#profile-img input[type="file"]');
   let profileImage = null;
 
-  const imageInput = document.querySelector('#profile-img input[type="file"]');
   if (imageInput) {
     imageInput.addEventListener('change', function (event) {
       const file = event.target.files[0];
@@ -98,20 +98,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (!isValid) return;
 
-      const joinForm = new FormData();
-      joinForm.append('profileImg', profileImage);
-      joinForm.append('email', email);
-      joinForm.append('password', password);
-      joinForm.append('nickname', nickname);
+      
+      const formData = new FormData();
+      formData.append('profileImg', profileImage);
+      formData.append('email', email);
+      formData.append('password', password);
+      formData.append('nickname', nickname);
 
-      console.log('회원가입 시도: ', { joinForm });
-
-      const response = postRequest(ENDPOINT.JOIN, joinForm, true);
-      if (!response.success) {
-        console.error(response.message);
-        // return;
+      console.log('회원가입 시도: ', { formData });
+      try {
+        const response = await postRequest(ENDPOINT.USERS, formData, true);
+        if (!response.success) {
+          throw new Error(response.message);
+        }
+        window.location.href = ROUTES.LOGIN;
+      } catch (err) {
+        console.error("회원가입 처리 중 오류:", err);
       }
-      window.location.href = ROUTES.LOGIN;
     });
   } else {
     console.error('회원가입 폼을 찾을 수 없습니다.');

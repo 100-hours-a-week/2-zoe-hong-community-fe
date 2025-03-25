@@ -1,5 +1,3 @@
-import { ENDPOINT } from '/js/config.js';
-
 export async function validateEmail(email) {
   if (!email) {
     return { valid: false, message: '* 이메일을 입력해주세요.' };
@@ -12,18 +10,9 @@ export async function validateEmail(email) {
     };
   }
 
-  try {
-    const response = await fetch(ENDPOINT.CHECK_EMAIL(email));
-    const data = await response.json();
-    if (data.exists) {
-      return { valid: false, message: '* 중복된 이메일입니다.' };
-    }
-    return { valid: true };
-  } catch (error) {
-    console.error('이메일 중복 검사 오류:', error);
-    // 임시
-    return { valid: true };
-  }
+  // 중복 검사
+
+  return { valid: true };
 }
 
 export function validatePassword(password) {
@@ -81,16 +70,7 @@ export async function validateNickname(nickname) {
     return { valid: false, message: '* 띄어쓰기를 없애주세요.' };
   }
 
-  try {
-    const response = await fetch(ENDPOINT.CHECK_NICKNAME(nickname));
-    const data = await response.json();
-    if (data.exists) {
-      return { valid: false, message: '* 중복된 닉네임입니다.' };
-    }
-    return { valid: true };
-  } catch (error) {
-    console.error('닉네임 중복 검사 오류:', error);
-    // 임시
-    return { valid: true };
-  }
+  // 중복 검사
+
+  return { valid: true };
 }

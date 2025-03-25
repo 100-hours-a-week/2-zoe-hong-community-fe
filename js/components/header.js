@@ -31,20 +31,16 @@ class LogoutHeaderComponent extends HTMLElement {
 
 class LoginHeaderComponent extends HTMLElement {
   connectedCallback() {
-    import('/data/data.js')
-      .then((module) => {
-        const { currentUser } = module;
-        this.renderHeader(currentUser);
-      })
-      .catch((error) => {
-        console.error('데이터 로드 실패:', error);
-        this.renderHeader({ profileImg: '/assets/user-profile.jpg' });
-      });
+    this.renderHeader();
+
+    window.addEventListener('userImgChanged', () => {
+      this.renderHeader();
+    })
   }
 
-  renderHeader(user) {
+  renderHeader() {
     const hasBackButton = this.hasAttribute('back');
-    const userProfileImg = user.profileImg;
+    const userProfileImg = localStorage.getItem('userImg');
 
     this.innerHTML = `
     <style>
@@ -113,16 +109,19 @@ class LoginHeaderComponent extends HTMLElement {
 
     const logout = this.querySelector('#logout');
     if (logout) {
-      logout.addEventListener('click', () => {
-        console.log('로그아웃 처리');
-        const response = postRequest(ENDPOINT.LOGOUT);
-        if (!response.success) {
-          console.error(response.message);
-          // return;
-        }
-        localStorage.removeItem('authToken');
-        window.location.href = ROUTES.LOGIN;
-      });
+      try {
+        logout.addEventListener('click', async () => {
+          console.log('로그아웃 처리');
+          const response = await postRequest(ENDPOINT.LOGOUT);
+          if (!response.success) {
+            throw new Error(response.message);
+          }
+          localStorage.removeItem('authToken');
+          window.location.href = ROUTES.LOGIN;
+        });
+      } catch (err) {
+        console.error("로그아웃 처리 중 오류:", err);
+      }
     }
   }
 }

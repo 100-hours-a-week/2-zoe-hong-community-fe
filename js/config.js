@@ -1,5 +1,5 @@
-const FE_URL = ''; // 프론트엔드 도메인
-const BE_URL = ''; // 백엔드 도메인
+const FE_URL = 'http://127.0.0.1:5500'; // 프론트엔드 도메인
+export const BE_URL = 'http://127.0.0.1:8080'; // 백엔드 도메인
 
 export const ROUTES = {
   LOGIN: `${FE_URL}/pages/login.html`,
@@ -15,20 +15,16 @@ export const ROUTES = {
 export const ENDPOINT = {
   LOGIN: `${BE_URL}/auth/login`,
   LOGOUT: `${BE_URL}/auth/logout`,
-  JOIN: `${BE_URL}/users`,
-  CHECK_EMAIL: (email) => `${BE_URL}/users/check-email?email=${email}`,
-  CHECK_NICKNAME: (nickname) => `${BE_URL}/users/check-nickname?nickname=${nickname}`,
+  USERS: `${BE_URL}/users`,
   DELETE_USER: `${BE_URL}/users/self`,
-  GET_USER_INFO: `${BE_URL}/users/self/info`,
-  UPDATE_USER_INFO: `${BE_URL}/users/self/info`,
+  UPDATE_PROFILE: `${BE_URL}/users/self/info`,
   UPDATE_PASSWORD: `${BE_URL}/users/self/password`,
-  GET_POST_LIST: `${BE_URL}/posts`,
-  CREATE_POST: `${BE_URL}/posts`,
-  GET_POST_DETAIL: (postId) => `${BE_URL}/posts/${postId}`,
-  UPDATE_POST: (postId) => `${BE_URL}/posts/${postId}`,
+  CHECK_EMAIL: `${BE_URL}/user/email`,
+  CHECK_NICKNAME: `${BE_URL}/user/nickname`,
+  POSTS: `${BE_URL}/posts`,
+  POST_DETAIL: (postId) => `${BE_URL}/posts/${postId}`,
+  POST_DETAIL_EDIT: (postId) => `${BE_URL}/posts/${postId}/edit`,
   LIKE_POST: (postId) => `${BE_URL}/posts/${postId}/like`,
-  GET_COMMENTS: (postId) => `${BE_URL}/posts/${postId}/comments`,
-  CREATE_COMMENT: (postId) => `${BE_URL}/posts/${postId}/comments`,
-  UPDATE_COMMENT: (postId, commentId) => `${BE_URL}/posts/${postId}/comments/${commentId}`,
-  DELETE_COMMENT: (postId, commentId) => `${BE_URL}/posts/${postId}/comments/${commentId}`,
+  COMMENTS: (postId) => `${BE_URL}/posts/${postId}/comments`,
+  COMMENT_DETAIL: (postId, commentId) => `${BE_URL}/posts/${postId}/comments/${commentId}`,
 };
