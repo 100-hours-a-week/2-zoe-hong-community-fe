@@ -1,8 +1,8 @@
 import { BE_URL, ROUTES, ENDPOINT } from '/js/config.js';
 import { showToast } from '/js/components/toast.js';
 import { getRequest, patchRequest, deleteRequest } from '/js/utils/api.js';
-import { showErrorMessage, clearErrorMessage } from '/js/utils/util.js';
 import { validateNickname } from '/js/utils/userUtil.js';
+import { showErrorMessage, clearErrorMessage } from '/js/utils/util.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
   const link = document.createElement('link');
@@ -17,8 +17,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const deleteUser = document.getElementById('delete-user');
   const deleteModal = document.getElementById('user-delete-modal');
 
+  let response;
   try {
-    const response = await getRequest(ENDPOINT.UPDATE_PROFILE);
+    response = await getRequest(ENDPOINT.UPDATE_PROFILE);
     if (!response.success) {
       throw new Error(response.message);
     }
@@ -53,13 +54,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  let newProfileImage = null;
-
+  let newProfileImg;
   if (profileImg) {
     profileImg.addEventListener('change', function (event) {
       const file = event.target.files[0];
+      newProfileImg = file;
+      
       if (file) {
-        newProfileImage = file;
         const reader = new FileReader();
 
         reader.onload = function (e) {
@@ -85,27 +86,32 @@ document.addEventListener('DOMContentLoaded', async () => {
     editProfile.addEventListener('submit', async function (event) {
       event.preventDefault();
 
-      const validation = await validateNickname(nickname.value);
-      if (!validation.valid) {
-        showErrorMessage('edit-profile', validation.message);
-        return;
-      } else {
-        clearErrorMessage('edit-profile');
-      }
-
-      const profileData = new FormData();
-      profileData.append('nickname', nickname.value.trim());
-      if (newProfileImage) {
-        profileData.append('profileImg', newProfileImage);
-      } else {
-        profileData.append('profileImg', user.profileImg);
-      }
-
       try {
-        const response = patchRequest(ENDPOINT.UPDATE_PROFILE, profileData, true);
+        if (user.nickname !== nickname.value) {
+          const validation = await validateNickname(nickname.value);
+          if (!validation.valid) {
+            showErrorMessage('edit-profile', validation.message);
+            throw new Error(validation.message);
+          } else {
+            clearErrorMessage('edit-profile');
+          }
+        }
+
+        const profileData = new FormData();
+        profileData.append('nickname', nickname.value);
+        if (newProfileImg) {
+          profileData.append('profileImg', newProfileImg);
+        }
+        
+        const response = await patchRequest(ENDPOINT.UPDATE_PROFILE, profileData, true);
         if (!response.success) {
           throw new Error(response.message);
         }
+
+        const newProfileImgUrl = `${BE_URL}${response.user.profileImgUrl}`;
+        localStorage.setItem('userImg', newProfileImgUrl);
+        window.dispatchEvent(new Event('userImgChanged'));
+
         showToast('수정 완료', 'success');
       } catch (err) {
         console.error("프로필 수정 중 오류:", err);
@@ -116,13 +122,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // 회원 탈퇴
   if (deleteUser && deleteModal) {
-    deleteModal.setOnConfirm(() => {
-      const response = deleteRequest(ENDPOINT.DELETE_USER);
-      if (!response.success) {
-        console.error(response.message);
-        return;
+    deleteModal.setOnConfirm(async () => {
+      try {
+        const response = await deleteRequest(ENDPOINT.DELETE_USER);
+        if (!response.success) {
+          throw new Error(response.message);
+        }
+        window.location.href = ROUTES.LOGIN;
+      } catch (err) {
+        console.error("회원탈퇴 중 오류 발생:", err);
       }
-      window.location.href = ROUTES.LOGIN;
     });
 
     deleteUser.addEventListener('click', function (event) {
