@@ -16,13 +16,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  CommentInput(postId, null, () => {
-    CommentInput(postId); // 댓글 입력창 초기화
-    refreshComments(postId); // 댓글 목록 로딩
+  CommentInput(postId, null, async () => {
+    await refreshComments(postId);
   });
-  refreshComments(postId);
+  await refreshComments(postId);
 });
 
+// 댓글 목록 로딩
 async function refreshComments(postId) {
   try {
     const response = await getRequest(ENDPOINT.COMMENTS(postId));
@@ -38,7 +38,7 @@ async function refreshComments(postId) {
     commentListElement.innerHTML = '';
     
     // 댓글 불러오기
-    const userId = Number(sessionStorage.getItem('userId'));
+    const userId = Number(localStorage.getItem('userId'));
     comments
       .slice()
       .sort((a, b) => b.id - a.id) // ID 내림차순 정렬
@@ -126,24 +126,25 @@ function createCommentElement(comment, isCurrentUser) {
 
 // 삭제 버튼 설정 함수
 async function setupDeleteButton(button, deleteCommentModal, postId, commentId) {
-  button.addEventListener('click', async function (e) {
-    e.stopPropagation();
-    e.preventDefault();
+  button.addEventListener('click', function (e) {
+    deleteCommentModal.openModal();
 
-    if (deleteCommentModal) {
-      deleteCommentModal.openModal();
-      deleteCommentModal.setOnConfirm(async () => {
-        try {
-          const response = await deleteRequest(ENDPOINT.COMMENT_DETAIL(postId, commentId));
-          if (!response.success) {
-            throw new Error(response.message);
-          }
-          refreshComments(postId);
-        } catch (err) {
-          console.error("댓글 삭제 중 오류:", err);
+    const confirmBtn = deleteCommentModal.querySelector('.btn-danger');
+    const newBtn = confirmBtn.cloneNode(true);
+    confirmBtn.parentNode.replaceChild(newBtn, confirmBtn);
+
+    newBtn.addEventListener('click', async () => {
+      try {
+        const response = await deleteRequest(ENDPOINT.COMMENT_DETAIL(postId, commentId));
+        if (!response.success) {
+          throw new Error(response.message);
         }
-      });
-    }
+        deleteCommentModal.closeModal();
+        await refreshComments(postId);
+      } catch (err) {
+        console.error("댓글 삭제 중 오류:", err);
+      }
+    })
   });
 }
 
@@ -152,9 +153,8 @@ async function setupEditButton(button, postId, comment) {
   button.addEventListener('click', async function (e) {
     e.stopPropagation();
     try {
-      CommentInput(postId, comment, () => {
-        CommentInput(postId); // 댓글 입력창 초기화
-        refreshComments(postId); // 댓글 목록 로딩
+      CommentInput(postId, comment, async () => {
+        await refreshComments(postId);
       });
     } catch (err) {
       console.error("댓글 수정 조회 중 오류:", err);

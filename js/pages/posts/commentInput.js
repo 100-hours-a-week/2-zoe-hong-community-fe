@@ -37,13 +37,17 @@ function renderCommentForm(comment) {
 function commentAPIHandler(postId, comment, onSuccess) {
   const commentInput = document.querySelector('#comment-input-textarea');
   const commentButton = document.querySelector('#comment-submit-btn');
-
+  
   if (!commentInput || !commentButton) {
     console.error("댓글의 텍스트 입력란 또는 입력 버튼을 찾을 수 없습니다.");
     return;
   }
 
-  commentButton.addEventListener('click', async function (e) {
+  const newButton = commentButton.cloneNode(true);
+  commentButton.parentNode.replaceChild(newButton, commentButton);
+  
+
+  newButton.addEventListener('click', async function (e) {
     e.preventDefault();
     const content = commentInput.value.trim();
 
@@ -63,7 +67,9 @@ function commentAPIHandler(postId, comment, onSuccess) {
         throw new Error(response.message);
       }
 
-      onSuccess();
+      commentInput.value = '';
+      
+      await onSuccess();
     } catch (err) {
       console.error('댓글 생성 중 오류:', err);
     }
