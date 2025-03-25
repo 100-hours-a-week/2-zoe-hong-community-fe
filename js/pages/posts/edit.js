@@ -36,8 +36,9 @@ function getPostIdFromUrl() {
 
 async function loadPostEdit(postId) {
   try {
-    const response = await getRequest(ENDPOINT.POST_DETAIL(postId));
+    const response = await getRequest(ENDPOINT.POST_DETAIL_EDIT(postId));
     if (!response.success) throw new Error(response.message);
+    console.log(response.post);
     return response.post;
   } catch (err) {
     console.error("게시글 수정 조회 중 오류:", err);
@@ -46,7 +47,7 @@ async function loadPostEdit(postId) {
 }
 
 function isUserPostAuthor(post) {
-  const currentUserId = sessionStorage.getItem('userId');
+  const currentUserId = localStorage.getItem('userId');
   return post.user.id === Number(currentUserId);
 }
 
@@ -98,12 +99,10 @@ function setupEditFormSubmission(postId, post) {
     postForm.append('content', content.value.trim());
     if (newImageFile) {
       postForm.append('image', newImageFile);
-    } else {
-      postForm.append('image', post.imageUrl);
     }
 
     try {
-      const response = await putRequest(ENDPOINT.POST_DETAIL(postId), postForm, true);
+      const response = await putRequest(ENDPOINT.POST_DETAIL_EDIT(postId), postForm, true);
       if (!response.success) throw new Error(response.message);
       window.location.href = ROUTES.POST(postId);
     } catch (err) {
