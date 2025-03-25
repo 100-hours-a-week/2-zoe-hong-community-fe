@@ -31,20 +31,16 @@ class LogoutHeaderComponent extends HTMLElement {
 
 class LoginHeaderComponent extends HTMLElement {
   connectedCallback() {
-    import('/data/data.js')
-      .then((module) => {
-        const { currentUser } = module;
-        this.renderHeader(currentUser);
-      })
-      .catch((error) => {
-        console.error('데이터 로드 실패:', error);
-        this.renderHeader({ profileImg: '/assets/user-profile.jpg' });
-      });
+    this.renderHeader();
+
+    window.addEventListener('userImgChanged', () => {
+      this.renderHeader();
+    })
   }
 
-  renderHeader(user) {
+  renderHeader() {
     const hasBackButton = this.hasAttribute('back');
-    const userProfileImg = user.profileImg;
+    const userProfileImg = localStorage.getItem('userImg');
 
     this.innerHTML = `
     <style>
