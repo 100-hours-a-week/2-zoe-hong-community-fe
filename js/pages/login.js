@@ -1,4 +1,4 @@
-import { ROUTES, ENDPOINT } from '/js/config.js';
+import { BE_URL, ROUTES, ENDPOINT } from '/js/config.js';
 import { postRequest } from '/js/utils/api.js';
 import { validateEmail, validatePassword } from '/js/utils/loginUtil.js';
 import { showErrorMessage, clearErrorMessage } from '/js/utils/util.js';
@@ -46,7 +46,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!response.success) {
           throw new Error(response.message);
         }
-        sessionStorage.setItem('userId', response.id);
+        
+        localStorage.setItem('userId', response.user.id);
+        const profileImgUrl = `${BE_URL}${response.user.profileImgUrl}`;
+        localStorage.setItem('userImg', profileImgUrl);
         window.location.href = ROUTES.POST_LIST;
       } catch (err) {
         console.error("로그인 처리 중 오류:", err);
