@@ -60,7 +60,7 @@ function renderPost(post) {
 }
 
 function setupPostActions(postId, post) {
-  const userId = Number(sessionStorage.getItem('userId'));
+  const userId = Number(localStorage.getItem('userId'));
   const isCreatedBy = post.user.id === userId;
 
   const editButton = document.getElementById('post-edit-button');
@@ -125,6 +125,8 @@ function setupLike(postId, wasLiked) {
       } else {
         likeCard.classList.add('liked');
       }
+      
+      wasLiked = !wasLiked;
 
     } catch (err) {
       console.error("좋아요 처리 중 오류:", err);
