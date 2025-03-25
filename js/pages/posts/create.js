@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!response.success) {
           throw new Error(response.message);
         }
-        window.location.href = ROUTES.POST_LIST;
+        window.location.href = ROUTES.POST(response.id);
       } catch (err) {
         console.error("게시글 생성 중 오류:", err);
       }
