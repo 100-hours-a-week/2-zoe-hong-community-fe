@@ -130,6 +130,10 @@
   background-color: var(--gray);
   display: flex;
 }
+.post-content img {
+  max-width: 100%;
+  display: block;
+}
 .post-metadata {
   width: 100%;
   display: flex;
