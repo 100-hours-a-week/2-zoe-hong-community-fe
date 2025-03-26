@@ -88,6 +88,10 @@ class ModalEventHandler {
   }
 
   setOnConfirm(callback) {
+    const newBtn = this.confirmBtn.cloneNode(true);
+    this.confirmBtn.parentNode.replaceChild(newBtn, this.confirmBtn);
+    this.confirmBtn = newBtn;
+
     this.confirmBtn.addEventListener('click', () => {
       callback();
       this.closeModal();
