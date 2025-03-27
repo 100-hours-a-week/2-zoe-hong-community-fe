@@ -129,22 +129,19 @@ async function setupDeleteButton(button, deleteCommentModal, postId, commentId) 
   button.addEventListener('click', function (e) {
     deleteCommentModal.openModal();
 
-    const confirmBtn = deleteCommentModal.querySelector('.btn-danger');
-    const newBtn = confirmBtn.cloneNode(true);
-    confirmBtn.parentNode.replaceChild(newBtn, confirmBtn);
-
-    newBtn.addEventListener('click', async () => {
-      try {
-        const response = await deleteRequest(ENDPOINT.COMMENT_DETAIL(postId, commentId));
-        if (!response.success) {
-          throw new Error(response.message);
+    if (deleteCommentModal) {
+      deleteCommentModal.setOnConfirm(async() => {
+        try {
+          const response = await deleteRequest(ENDPOINT.COMMENT_DETAIL(postId, commentId));
+          if (!response.success) {
+            throw new Error(response.message);
+          }
+          refreshComments(postId);
+        } catch (err) {
+          console.error("댓글 삭제 중 오류:", err);
         }
-        deleteCommentModal.closeModal();
-        await refreshComments(postId);
-      } catch (err) {
-        console.error("댓글 삭제 중 오류:", err);
-      }
-    })
+      })
+    }
   });
 }
 
