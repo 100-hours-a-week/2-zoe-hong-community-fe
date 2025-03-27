@@ -99,6 +99,8 @@ cd your-project
 # 3. Live Server 실행
 ```
 
+<br/>
+
 ## 6. 데모 페이지
 ### 로그인
 <img width="1624" alt="Image" src="https://github.com/user-attachments/assets/17151756-2817-4c7a-b456-16e061e16e4b" />
