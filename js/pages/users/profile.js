@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           throw new Error(response.message);
         }
 
-        const newProfileImgUrl = `${BE_URL}${response.user.profileImgUrl}`;
+        const newProfileImgUrl = response.profileImgUrl;
         localStorage.setItem('userImg', newProfileImgUrl);
         window.dispatchEvent(new Event('userImgChanged'));
 
@@ -128,6 +128,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!response.success) {
           throw new Error(response.message);
         }
+        localStorage.removeItem('token');
         window.location.href = ROUTES.LOGIN;
       } catch (err) {
         console.error("회원탈퇴 중 오류 발생:", err);

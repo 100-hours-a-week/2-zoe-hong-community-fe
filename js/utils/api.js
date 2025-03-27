@@ -1,8 +1,12 @@
 export async function getRequest(url) {
   try {
+    const token = localStorage.getItem('token');
     const response = await fetch(url, {
       method: 'GET',
-      credentials: 'include'
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
     });
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -16,10 +20,17 @@ export async function getRequest(url) {
 
 export async function postRequest(url, data, isFormData = false) {
   try {
+    const token = localStorage.getItem('token');
     const response = await fetch(url, {
       method: 'POST',
-      credentials: 'include',
-      headers: isFormData ? {} : { 'Content-Type': 'application/json' },
+      headers: isFormData
+        ? {
+          'Authorization': `Bearer ${token}`,
+        }
+        : {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
       body: isFormData ? data : JSON.stringify(data),
     });
     return await response.json();
@@ -31,10 +42,17 @@ export async function postRequest(url, data, isFormData = false) {
 
 export async function putRequest(url, data, isFormData = false) {
   try {
+    const token = localStorage.getItem('token');
     const response = await fetch(url, {
       method: 'PUT',
-      credentials: 'include',
-      headers: isFormData ? {} : { 'Content-Type': 'application/json' },
+      headers: isFormData
+        ? {
+          'Authorization': `Bearer ${token}`,
+        }
+        : {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
       body: isFormData ? data : JSON.stringify(data),
     });
     return await response.json();
@@ -46,10 +64,17 @@ export async function putRequest(url, data, isFormData = false) {
 
 export async function patchRequest(url, data, isFormData = false) {
   try {
+    const token = localStorage.getItem('token');
     const response = await fetch(url, {
       method: 'PATCH',
-      credentials: 'include',
-      headers: isFormData ? {} : { 'Content-Type': 'application/json' },
+      headers: isFormData
+        ? {
+          'Authorization': `Bearer ${token}`,
+        }
+        : {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
       body: isFormData ? data : JSON.stringify(data),
     });
     return await response.json();
@@ -61,9 +86,13 @@ export async function patchRequest(url, data, isFormData = false) {
 
 export async function deleteRequest(url) {
   try {
+    const token = localStorage.getItem('token');
     const response = await fetch(url, {
       method: 'DELETE',
-      credentials: 'include'
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
     });
     return await response.json();
   } catch (error) {
