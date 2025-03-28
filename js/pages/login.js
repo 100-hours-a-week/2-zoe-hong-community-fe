@@ -47,7 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
           throw new Error(response.message);
         }
 
-        localStorage.setItem('token', response.token);
+        localStorage.setItem('accessToken', response.accessToken);
+        localStorage.setItem('refreshToken', response.refreshToken);
         localStorage.setItem('userImg', response.profileImgUrl);
 
         window.location.href = ROUTES.POST_LIST;
