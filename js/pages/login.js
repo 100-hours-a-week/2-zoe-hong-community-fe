@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
           throw new Error(response.message);
         }
 
-        localStorage.setItem('accessToken', response.accessToken);
+        localStorage.setItem('token', response.token);
         localStorage.setItem('refreshToken', response.refreshToken);
         localStorage.setItem('userImg', response.profileImgUrl);
 

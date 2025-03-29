@@ -15,6 +15,7 @@ export const ROUTES = {
 export const ENDPOINT = {
   LOGIN: `${BE_URL}/auth/login`,
   LOGOUT: `${BE_URL}/auth/logout`,
+  REFRESH: `${BE_URL}/auth/refresh`,
   USERS: `${BE_URL}/users`,
   DELETE_USER: `${BE_URL}/users/self`,
   UPDATE_PROFILE: `${BE_URL}/users/self/info`,

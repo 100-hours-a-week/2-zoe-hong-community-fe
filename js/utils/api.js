@@ -21,11 +21,11 @@ async function sendRequest(method, url, data = null, isFormData = false) {
     const response = await fetch(url, options);
 
     if (response.status === 401) {
-      // Access Token이 만료되었을 가능성 → Refresh 시도
+      // Access Token이 만료되었으면 Refresh 시도
       const success = await refreshAccessToken();
       if (success) {
-        token = localStorage.getItem('token'); // 갱신된 토큰 사용
-        return await sendRequest(method, url, data, isFormData); // 재요청
+        token = localStorage.getItem('token');
+        return await sendRequest(method, url, data, isFormData);
       } else {
         throw new Error('인증 실패: 재로그인 필요');
       }

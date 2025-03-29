@@ -116,8 +116,9 @@ class LoginHeaderComponent extends HTMLElement {
           if (!response.success) {
             throw new Error(response.message);
           }
-          localStorage.removeItem('accessToken');
+          localStorage.removeItem('token');
           localStorage.removeItem('refreshToken');
+          localStorage.removeItem('userImg');
           window.location.href = ROUTES.LOGIN;
         });
       } catch (err) {

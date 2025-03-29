@@ -128,8 +128,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!response.success) {
           throw new Error(response.message);
         }
-        localStorage.removeItem('accessToken');
+        localStorage.removeItem('token');
         localStorage.removeItem('refreshToken');
+        localStorage.removeItem('userImg');
         window.location.href = ROUTES.LOGIN;
       } catch (err) {
         console.error("회원탈퇴 중 오류 발생:", err);
