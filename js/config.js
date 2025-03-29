@@ -15,6 +15,7 @@ export const ROUTES = {
 export const ENDPOINT = {
   LOGIN: `${BE_URL}/auth/login`,
   LOGOUT: `${BE_URL}/auth/logout`,
+  REFRESH: `${BE_URL}/auth/refresh`,
   USERS: `${BE_URL}/users`,
   DELETE_USER: `${BE_URL}/users/self`,
   UPDATE_PROFILE: `${BE_URL}/users/self/info`,
@@ -22,7 +23,7 @@ export const ENDPOINT = {
   CHECK_EMAIL: `${BE_URL}/user/email`,
   CHECK_NICKNAME: `${BE_URL}/user/nickname`,
   POSTS: `${BE_URL}/posts`,
-  POST_DETAIL: (postId) => `${BE_URL}/posts/${postId}`,
+  POST_DETAIL: (postId, isEdit=false) => `${BE_URL}/posts/${postId}?isEdit=${isEdit}`,
   POST_DETAIL_EDIT: (postId) => `${BE_URL}/posts/${postId}/edit`,
   LIKE_POST: (postId) => `${BE_URL}/posts/${postId}/like`,
   COMMENTS: (postId) => `${BE_URL}/posts/${postId}/comments`,

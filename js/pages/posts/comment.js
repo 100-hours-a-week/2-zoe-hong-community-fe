@@ -38,7 +38,10 @@ async function refreshComments(postId) {
     commentListElement.innerHTML = '';
     
     // 댓글 불러오기
-    const userId = Number(localStorage.getItem('userId'));
+    const token = localStorage.getItem('token');
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const userId = payload.id;
+
     comments
       .slice()
       .sort((a, b) => b.id - a.id) // ID 내림차순 정렬

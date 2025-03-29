@@ -36,7 +36,7 @@ function getPostIdFromUrl() {
 
 async function loadPostEdit(postId) {
   try {
-    const response = await getRequest(ENDPOINT.POST_DETAIL_EDIT(postId));
+    const response = await getRequest(ENDPOINT.POST_DETAIL(postId, true));
     if (!response.success) throw new Error(response.message);
     console.log(response.post);
     return response.post;
@@ -47,7 +47,9 @@ async function loadPostEdit(postId) {
 }
 
 function isUserPostAuthor(post) {
-  const currentUserId = localStorage.getItem('userId');
+  const token = localStorage.getItem('token');
+  const payload = JSON.parse(atob(token.split('.')[1]));
+  const currentUserId = payload.id;
   return post.user.id === Number(currentUserId);
 }
 

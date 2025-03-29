@@ -60,7 +60,9 @@ function renderPost(post) {
 }
 
 function setupPostActions(postId, post) {
-  const userId = Number(localStorage.getItem('userId'));
+  const token = localStorage.getItem('token');
+  const payload = JSON.parse(atob(token.split('.')[1]));
+  const userId = payload.id;
   const isCreatedBy = post.user.id === userId;
 
   const editButton = document.getElementById('post-edit-button');
@@ -118,6 +120,7 @@ function setupLike(postId, wasLiked) {
 
       if (!response.success) throw new Error(response.message);
 
+      
       likeCount.textContent = response.likes;
 
       if (wasLiked) {

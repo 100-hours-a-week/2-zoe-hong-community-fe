@@ -1,5 +1,5 @@
-import { postRequest } from '/js/utils/api.js';
-import { ROUTES, ENDPOINT } from '/js/config.js';
+import { BE_URL, ROUTES, ENDPOINT } from '/js/config.js';
+import { postRequest } from '/js/utils/api.js'
 
 class LogoutHeaderComponent extends HTMLElement {
   connectedCallback() {
@@ -40,7 +40,7 @@ class LoginHeaderComponent extends HTMLElement {
 
   renderHeader() {
     const hasBackButton = this.hasAttribute('back');
-    const userProfileImg = localStorage.getItem('userImg');
+    const userProfileImg = `${BE_URL}${localStorage.userImg}`;
 
     this.innerHTML = `
     <style>
@@ -116,7 +116,9 @@ class LoginHeaderComponent extends HTMLElement {
           if (!response.success) {
             throw new Error(response.message);
           }
-          localStorage.removeItem('authToken');
+          localStorage.removeItem('token');
+          localStorage.removeItem('refreshToken');
+          localStorage.removeItem('userImg');
           window.location.href = ROUTES.LOGIN;
         });
       } catch (err) {
